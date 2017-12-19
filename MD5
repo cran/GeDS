@@ -1,9 +1,9 @@
-f2b0c8d80454e2367d6406e7f3c92312 *DESCRIPTION
+fe9d43f6a1df44905385a3c230841b56 *DESCRIPTION
 01c0dc11258eeb4f7347c26d228b5d57 *NAMESPACE
 fb9f06af1ccf2fd98404aad6a1f29af1 *R/BivariateFitter.R
 383cef09591be1d122dcf140b922bac1 *R/GEDSClass.R
 69e58103bea0724ddab4fdac2dda99ad *R/GGeDS.R
-9af63646601acf8f3b80987c1a462c72 *R/GeDS-package.R
+e2fc3c260a4a10ad0da8b11cdfea51f3 *R/GeDS-package.R
 223287cc0a469c978cb51f297737dfe4 *R/IRLSfit.R
 7b10bdbf6148432759b082c71ca80ebd *R/IntegrateDerive.R
 7ec2eff9bf67cc0d08b81f9f76615587 *R/NGeDS.R
@@ -14,7 +14,7 @@ fd129905fdbbc547d79470793ba714c9 *R/S3methods.R
 892f4c93fce59e78544e8ef837cf5f22 *R/SplineReg_fast_biv.R
 24be2186c723e1cadab94dcde191dd87 *R/SplineReg_fast_weighted_zed.R
 493a5424f608a53b83d7408f05ae4017 *R/UnivariateFitter.R
-6e49065af308c36f9b63d666ecda19ab *R/dynlib.R
+415dee3dc13510f658e92b8befa38eb4 *R/dynlib.R
 144f08215d3fbaabb93bd4aa4f28b368 *R/lines_GeDSMethod.R
 b5c1d19639e00b96a67c6f03e893cbb1 *R/lm.wfit.light.R
 5635131025a649cf56b8c7af2264589a *R/makeNewMatr.R
@@ -33,7 +33,7 @@ db536d20ddae13150765acc2b7bed11d *man/Derive.Rd
 b155ab51d9496dcd6c98e71e6f06dfd5 *man/Fitters.Rd
 ec60ea321d1d1a07bb6a4d277164bd3f *man/GGeDS.Rd
 b0fbf2c442a7b0a4cc228f7d2ff78ebb *man/GeDS-class.Rd
-d9712322030956ec46d5810f89192f3e *man/GeDS-package.Rd
+9dbaca8c5606c26755aca53ee6a38d9b *man/GeDS-package.Rd
 1d3a3bd67f4b39e1c8183f5bb47e7740 *man/IRLSfit.Rd
 c88e93be323618e7da16c30de403f0a5 *man/Integrate.Rd
 9342100b0bfecce1b042284c9ed29e1d *man/NGeDS.Rd
