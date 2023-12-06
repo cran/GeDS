@@ -62,4 +62,3 @@ formula <- Y ~ f(X) + reg1 + reg2 + offset(off)
 \seealso{
 \link{NGeDS}; \link{GGeDS}.
 }
-

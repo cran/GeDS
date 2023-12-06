@@ -4,9 +4,20 @@
 \alias{NGeDS}
 \title{Geometrically Designed Spline regression estimation}
 \usage{
-NGeDS(formula, data, weights, beta = 0.5, phi = 0.99, min.intknots = 0,
-  max.intknots = 500, q = 2, Xextr = NULL, Yextr = NULL,
-  show.iters = FALSE, stoptype = "RD")
+NGeDS(
+  formula,
+  data,
+  weights,
+  beta = 0.5,
+  phi = 0.99,
+  min.intknots = 0,
+  max.intknots = 500,
+  q = 2,
+  Xextr = NULL,
+  Yextr = NULL,
+  show.iters = FALSE,
+  stoptype = "RD"
+)
 }
 \arguments{
 \item{formula}{a description of the structure of the model to be fitted, including the
@@ -204,7 +215,7 @@ Xextr = c(0, 3), Yextr = c(0, 3)))
 Kaishev, V.K., Dimitrova, D.S., Haberman, S. and Verrall, R.J. (2016).
 Geometrically designed, variable knot regression splines.
 \emph{Computational Statistics}, \strong{31}, 1079--1105. \cr
-DOI: \href{https://doi.org/10.1007/s00180-015-0621-7}{doi.org/10.1007/s00180-015-0621-7}
+DOI: \doi{10.1007/s00180-015-0621-7}
 
 Dimitrova, D.S., Kaishev, V.K., Lattuada A. and Verrall, R.J. (2017).
 Geometrically designed, variable knot splines in Generalized (Non-)Linear Models
@@ -213,4 +224,3 @@ Geometrically designed, variable knot splines in Generalized (Non-)Linear Models
 \link{GGeDS}; \link{GeDS-Class}; S3 methods such as \link{coef.GeDS}, \link{deviance.GeDS}, \link{knots.GeDS},
 \link{print.GeDS} and \link{predict.GeDS}; \link{Integrate} and \link{Derive}; \link{PPolyRep}.
 }
-

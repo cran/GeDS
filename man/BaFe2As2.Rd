@@ -4,13 +4,15 @@
 \name{BaFe2As2}
 \alias{BaFe2As2}
 \title{Barium-Ferrum-Arsenide powder diffraction data}
-\format{A \code{data.frame} with 1151 cases and 2 variables:
+\format{
+A \code{data.frame} with 1151 cases and 2 variables:
 \describe{
   \item{angle}{ the dispersion angle, viewed as the independent variable.}
   \item{intensity}{ the neutron diffraction intensity, viewed as the response variable.}
-}}
+}
+}
 \source{
-\href{http://openaccess.city.ac.uk/12418/}{openaccess.city.ac.uk}
+\href{https://openaccess.city.ac.uk/12418/}{openaccess.city.ac.uk}
 }
 \usage{
 data(BaFe2As2)
@@ -39,7 +41,7 @@ plot(Gmod)
 Kaishev, V.K., Dimitrova, D.S., Haberman, S. and Verrall, R.J. (2016).
 Geometrically designed, variable knot regression splines.
 \emph{Computational Statistics}, \strong{31}, 1079--1105. \cr
-DOI: \href{https://doi.org/10.1007/s00180-015-0621-7}{doi.org/10.1007/s00180-015-0621-7}
+DOI: \doi{10.1007/s00180-015-0621-7}
 
 Kimber, S.A.J., Kreyssig, A., Zhang, Y.Z., Jeschke, H.O., Valenti, R., Yokaichiya, F.,
  Colombier, E., Yan, J., Hansen, T.C., Chatterji, T.,
@@ -48,4 +50,3 @@ Kimber, S.A.J., Kreyssig, A., Zhang, Y.Z., Jeschke, H.O., Valenti, R., Yokaichiy
  \eqn{\mathrm{Ba Fe_2 As_2}}.
  \emph{Nat Mater}, \strong{8}, 471--475.
 }
-

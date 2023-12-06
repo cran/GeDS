@@ -2,16 +2,36 @@
 % Please edit documentation in R/SplineReg.R
 \name{SplineReg}
 \alias{SplineReg}
-\alias{SplineReg_GLM}
 \alias{SplineReg_LM}
+\alias{SplineReg_GLM}
 \title{Estimation of the coefficients of a predictor model with spline and possibly parametric components.}
 \usage{
-SplineReg_LM(X, Y, Z = NULL, offset = rep(0, NROW(Y)), weights = rep(1,
-  length(X)), InterKnots, n, extr = range(X), prob = 0.95)
+SplineReg_LM(
+  X,
+  Y,
+  Z = NULL,
+  offset = rep(0, NROW(Y)),
+  weights = rep(1, length(X)),
+  InterKnots,
+  n,
+  extr = range(X),
+  prob = 0.95
+)
 
-SplineReg_GLM(X, Y, Z, offset = rep(0, nobs), weights = rep(1, length(X)),
-  InterKnots, n, extr = range(X), family, mustart, inits = NULL,
-  etastart = NULL)
+SplineReg_GLM(
+  X,
+  Y,
+  Z,
+  offset = rep(0, nobs),
+  weights = rep(1, length(X)),
+  InterKnots,
+  n,
+  extr = range(X),
+  family,
+  mustart,
+  inits = NULL,
+  etastart = NULL
+)
 }
 \arguments{
 \item{X}{a numeric vector containing \eqn{N} sample values of the covariate chosen to enter the spline
@@ -133,19 +153,18 @@ spline fit of Stage A. %We note that in the
 Kaishev, V. K., Dimitrova, D. S., Haberman, S. & Verrall, R. J. (2006).
 Geometrically designed, variable know regression splines: asymptotics and inference \emph{(Statistical Research Paper No. 28)}.
 London, UK: Faculty of Actuarial Science & Insurance, City University London. \cr
-URL: \href{http://openaccess.city.ac.uk/id/eprint/2372}{openaccess.city.ac.uk}
+URL: \href{https://openaccess.city.ac.uk/id/eprint/2372}{openaccess.city.ac.uk}
 
 Kaishev, V.K., Dimitrova, D.S., Haberman, S., & Verrall, R.J. (2016).
 Geometrically designed, variable knot regression splines.
 \emph{Computational Statistics}, \strong{31}, 1079--1105. \cr
-DOI: \href{https://doi.org/10.1007/s00180-015-0621-7}{doi.org/10.1007/s00180-015-0621-7}
+DOI: \doi{10.1007/s00180-015-0621-7}
 
 Dimitrova, D.S., Kaishev, V.K., Lattuada A. and Verrall, R.J. (2017).
 Geometrically designed, variable knot splines in Generalized (Non-)Linear Models.
-Available at \href{http://openaccess.city.ac.uk/18460/}{openaccess.city.ac.uk}
+Available at \href{https://openaccess.city.ac.uk/18460/}{openaccess.city.ac.uk}
 }
 \seealso{
 \code{\link{NGeDS}}, \code{\link{GGeDS}}, \code{\link{Fitters}}, \code{\link{IRLSfit}},
 \code{\link[stats]{lm}} and \code{\link[stats]{glm.fit}}.
 }
-

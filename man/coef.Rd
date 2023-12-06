@@ -79,4 +79,3 @@ coef(Gmod, onlySpline = FALSE, n = 3)
 \seealso{
 \code{\link[stats]{coef}} for the standard definition; \code{\link{NGeDS}} for examples.
 }
-

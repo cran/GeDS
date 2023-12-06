@@ -2,8 +2,8 @@
 % Please edit documentation in R/GEDSClass.R
 \docType{class}
 \name{GeDS-class}
-\alias{GeDS-Class}
 \alias{GeDS-class}
+\alias{GeDS-Class}
 \title{GeDS Class}
 \description{
 A fitted GeDS object returned by functions \code{\link{NGeDS}} or \code{\link{GGeDS}}
@@ -84,9 +84,9 @@ if the \code{SR} stopping rule was chosen. They contain respectively \eqn{\hat{\
 
 \item{\code{terms}}{\code{terms} object containing information on the model frame.}
 }}
+
 \references{
 Dimitrova, D.S., Kaishev, V.K., Lattuada A. and Verrall, R.J. (2017).
 Geometrically designed, variable knot splines in Generalized (Non-)Linear Models.
-Available at \href{http://openaccess.city.ac.uk/18460/}{openaccess.city.ac.uk}
+Available at \href{https://openaccess.city.ac.uk/18460/}{openaccess.city.ac.uk}
 }
-

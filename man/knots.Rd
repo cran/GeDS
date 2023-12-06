@@ -39,4 +39,3 @@ to specify the order of the GeDS fit  whose knots  are required via the input ar
 \seealso{
 \code{\link[stats]{knots}} for the definition of the generic function; \code{\link{NGeDS}} and \code{\link{GGeDS}} for examples.
 }
-

@@ -4,12 +4,14 @@
 \name{coalMining}
 \alias{coalMining}
 \title{Coal Mining Disasters data}
-\format{A \code{data.frame} with 112 entries, corresponding to the
+\format{
+A \code{data.frame} with 112 entries, corresponding to the
 years from 1850 to 1962. Each entry has:
 \describe{
   \item{accidents}{ number of severe accidents that have occurred each year.}
   \item{years}{ year during which accidents occurred.}
-}}
+}
+}
 \usage{
 data(coalMining)
 }
@@ -26,4 +28,3 @@ Hierarchical Bayesian analysis of changepoint problems.
 Eilers, P.H.C. and Marx, B.D. (1996). Flexible Smoothing with B-splines
 and Penalties. \emph{Statistical Science}, \strong{11}(2), 89--121.
 }
-

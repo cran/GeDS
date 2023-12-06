@@ -33,4 +33,3 @@ for the three (linear, quadratic and cubic) fitted predictor models embedded in 
 \seealso{
 \code{\link[base]{print}} for the standard definition.
 }
-

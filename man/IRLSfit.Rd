@@ -4,8 +4,15 @@
 \alias{IRLSfit}
 \title{IRLS Estimation}
 \usage{
-IRLSfit(x, y, weights = rep(1, nobs), mustart = NULL, offset = rep(0,
-  nobs), family = gaussian(), control = list())
+IRLSfit(
+  x,
+  y,
+  weights = rep(1, nobs),
+  mustart = NULL,
+  offset = rep(0, nobs),
+  family = gaussian(),
+  control = list()
+)
 }
 \arguments{
 \item{x}{a matrix of regression functions (e.g. B-splines and/or terms of the parametric part)
@@ -81,4 +88,3 @@ Normally, printing these plots is time consuming, but they could be run for insp
 \seealso{
 \code{\link[stats]{glm.fit}}
 }
-

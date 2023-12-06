@@ -2,8 +2,8 @@
 % Please edit documentation in R/GeDS-package.R
 \docType{package}
 \name{GeDS-package}
-\alias{GeDS}
 \alias{GeDS-package}
+\alias{GeDS}
 \title{GeDS}
 \description{
 Geometrically Designed Splines (GeDS) regression is a non-parametric geometrically motivated method
@@ -58,21 +58,20 @@ Date: \tab 2017-12-19\cr
 License: \tab GPL-3 \cr
 }
 }
+\references{
+Kaishev, V.K., Dimitrova, D.S., Haberman, S., & Verrall, R.J. (2016).
+Geometrically designed, variable knot regression splines.
+\emph{Computational Statistics}, \strong{31}, 1079--1105. \cr
+DOI: \doi{10.1007/s00180-015-0621-7}
+
+Dimitrova, D.S., Kaishev, V.K., Lattuada A. and Verrall, R.J. (2017).
+Geometrically designed, variable knot splines in Generalized (Non-)Linear Models.
+Available at \href{https://openaccess.city.ac.uk/18460/}{openaccess.city.ac.uk}
+}
 \author{
 Dimitrina S. Dimitrova <D.Dimitrova@city.ac.uk>,
 Vladimir K. Kaishev <V.Kaishev@city.ac.uk>,
 Andrea Lattuada <Andrea.Lattuada@unicatt.it> and
 Richard J. Verrall <R.J.Verrall@city.ac.uk>
 }
-\references{
-Kaishev, V.K., Dimitrova, D.S., Haberman, S., & Verrall, R.J. (2016).
-Geometrically designed, variable knot regression splines.
-\emph{Computational Statistics}, \strong{31}, 1079--1105. \cr
-DOI: \href{https://doi.org/10.1007/s00180-015-0621-7}{doi.org/10.1007/s00180-015-0621-7}
-
-Dimitrova, D.S., Kaishev, V.K., Lattuada A. and Verrall, R.J. (2017).
-Geometrically designed, variable knot splines in Generalized (Non-)Linear Models.
-Available at \href{http://openaccess.city.ac.uk/18460/}{openaccess.city.ac.uk}
-}
 \keyword{package}
-

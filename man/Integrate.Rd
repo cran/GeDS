@@ -60,13 +60,13 @@ Y <- rnorm(N, means, sd = 0.1)
 # Fit GeDS regression using NGeDS
 Gmod <- NGeDS(Y ~ f(X), beta = 0.6, phi = .995, Xextr = c(-2,2))
 
-# Compute defined integrals (in TeX style) $\\int_{1}^{-1} f(x)dx$
-# and $\\int_{1}^{1} f(x)dx$
+# Compute defined integrals (in TeX style) $\int_{1}^{-1} f(x)dx$
+# and $\int_{1}^{1} f(x)dx$
 # $f$ being the quadratic fit
 Integrate(Gmod, to = c(-1,1), from = 1, n = 3)
 
-# Compute defined integrals (in TeX style) $\\int_{1}^{-1} f(x)dx$
-# and $\\int_{-1}^{1} f(x)dx$
+# Compute defined integrals (in TeX style) $\int_{1}^{-1} f(x)dx$
+# and $\int_{-1}^{1} f(x)dx$
 # $f$ being the quadratic fit
 Integrate(Gmod, to = c(-1,1), from = c(1,-1), n = 3)
 
@@ -79,4 +79,3 @@ Integrate(Gmod, to = 1, from = c(1,-1), n = 3)
 De Boor, C. (2001). \emph{A Practical Guide to Splines (Revised Edition)}.
 Springer, New York.
 }
-

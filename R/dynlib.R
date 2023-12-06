@@ -51,7 +51,7 @@ NULL
 #' Kaishev, V.K., Dimitrova, D.S., Haberman, S. and Verrall, R.J. (2016).
 #' Geometrically designed, variable knot regression splines.
 #' \emph{Computational Statistics}, \strong{31}, 1079--1105. \cr
-#' DOI: \href{https://doi.org/10.1007/s00180-015-0621-7}{doi.org/10.1007/s00180-015-0621-7}
+#' DOI: \doi{10.1007/s00180-015-0621-7}
 #'
 #' Kimber, S.A.J., Kreyssig, A., Zhang, Y.Z., Jeschke, H.O., Valenti, R., Yokaichiya, F.,
 #'  Colombier, E., Yan, J., Hansen, T.C., Chatterji, T.,
@@ -60,7 +60,7 @@ NULL
 #'  \eqn{\mathrm{Ba Fe_2 As_2}}.
 #'  \emph{Nat Mater}, \strong{8}, 471--475.
 #'
-#' @source \href{http://openaccess.city.ac.uk/12418/}{openaccess.city.ac.uk}
+#' @source \href{https://openaccess.city.ac.uk/12418/}{openaccess.city.ac.uk}
 #'
 #' @name BaFe2As2
 #' @examples \dontrun{
@@ -85,7 +85,7 @@ NULL
 NULL
 #
 
-# #' @source \url{http://people.reed.edu/~jones/141/Coal.html}
+# #' @source \url{https://people.reed.edu/~jones/141/Coal.html}
 #' Coal Mining Disasters data
 #'
 #' @name coalMining
@@ -123,8 +123,8 @@ NULL
 #'
 #' @format A \code{data.frame} with 109 entries and 3 variables: \code{Age},
 #'   \code{Deaths} and \code{Exposure}.
-#'
-#'   {\code{Exposure} is a mid-year estimate of the population exposed to risk.}
+#' 
+#'   \code{Exposure} is a mid-year estimate of the population exposed to risk.
 #'
 #' @docType data
 #' @usage data(EWmortality)

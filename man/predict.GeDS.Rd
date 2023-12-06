@@ -4,8 +4,7 @@
 \alias{predict.GeDS}
 \title{Predict method for GeDS objects}
 \usage{
-\method{predict}{GeDS}(object, newdata, type = c("response", "link", "terms"),
-  n = 3L, ...)
+\method{predict}{GeDS}(object, newdata, type = c("response", "link", "terms"), n = 3L, ...)
 }
 \arguments{
 \item{object}{the  \code{\link{GeDS-class}} object for which the
@@ -59,4 +58,3 @@ for which GeDS predictions are required via the input argument \code{n}.
 \seealso{
 \code{\link[stats]{predict}} for the standard definition; \code{\link{GGeDS}} for examples.
 }
-

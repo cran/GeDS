@@ -33,4 +33,3 @@ to specify the order of the GeDS fit for which the deviance is required via the 
 \seealso{
 \code{\link[stats]{deviance}} for the standard definition; \code{\link{GGeDS}} for examples.
 }
-

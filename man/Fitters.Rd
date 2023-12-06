@@ -2,20 +2,44 @@
 % Please edit documentation in R/UnivariateFitter.R
 \name{Fitters}
 \alias{Fitters}
-\alias{GenUnivariateFitter}
 \alias{UnivariateFitter}
+\alias{GenUnivariateFitter}
 \title{Functions used to fit GeDS  objects.}
 \usage{
-UnivariateFitter(X, Y, Z = NULL, offset = rep(0, NROW(Y)),
-  weights = rep(1, length(X)), beta = 0.5, phi = 0.5, min.intknots = 0,
-  max.intknots = 300, q = 2, extr = range(X), show.iters = FALSE,
-  tol = as.double(1e-12), stoptype = c("SR", "RD", "LR"))
+UnivariateFitter(
+  X,
+  Y,
+  Z = NULL,
+  offset = rep(0, NROW(Y)),
+  weights = rep(1, length(X)),
+  beta = 0.5,
+  phi = 0.5,
+  min.intknots = 0,
+  max.intknots = 300,
+  q = 2,
+  extr = range(X),
+  show.iters = FALSE,
+  tol = as.double(1e-12),
+  stoptype = c("SR", "RD", "LR")
+)
 
-GenUnivariateFitter(X, Y, Z = NULL, offset = rep(0, NROW(Y)),
-  weights = rep(1, length(X)), family = gaussian(), beta = 0.5,
-  phi = 0.5, min.intknots = 0, max.intknots = 300, q = 2,
-  extr = range(X), show.iters = F, tol = as.double(1e-12),
-  stoptype = c("SR", "RD", "LR"))
+GenUnivariateFitter(
+  X,
+  Y,
+  Z = NULL,
+  offset = rep(0, NROW(Y)),
+  weights = rep(1, length(X)),
+  family = gaussian(),
+  beta = 0.5,
+  phi = 0.5,
+  min.intknots = 0,
+  max.intknots = 300,
+  q = 2,
+  extr = range(X),
+  show.iters = F,
+  tol = as.double(1e-12),
+  stoptype = c("SR", "RD", "LR")
+)
 }
 \arguments{
 \item{X}{a numeric vector containing   \eqn{N} sample values of the covariate chosen to enter the spline
@@ -143,13 +167,12 @@ legend("topleft", c("Quadratic","Cubic"),
 Kaishev, V.K., Dimitrova, D.S., Haberman, S., & Verrall, R.J. (2016).
 Geometrically designed, variable knot regression splines.
 \emph{Computational Statistics}, \strong{31}, 1079--1105. \cr
-DOI: \href{https://doi.org/10.1007/s00180-015-0621-7}{doi.org/10.1007/s00180-015-0621-7}
+DOI: \doi{10.1007/s00180-015-0621-7}
 
 Dimitrova, D.S., Kaishev, V.K., Lattuada A. and Verrall, R.J. (2017).
 Geometrically designed, variable knot splines in Generalized (Non-)Linear Models.
-Available at \href{http://openaccess.city.ac.uk/18460/}{openaccess.city.ac.uk}
+Available at \href{https://openaccess.city.ac.uk/18460/}{openaccess.city.ac.uk}
 }
 \seealso{
 \code{\link{NGeDS}} and \code{\link{GGeDS}}.
 }
-

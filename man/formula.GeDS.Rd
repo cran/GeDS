@@ -49,4 +49,3 @@ Therefore, if the functional dependence of the mean of the response variable \co
  specify one or more offset variables, i.e. known terms with fixed regression coefficients equal to 1.
  These terms should be identified via the function \code{\link[stats]{offset}}.
 }
-

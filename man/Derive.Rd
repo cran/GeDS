@@ -59,4 +59,3 @@ Derive(Gmod, x = c(0, -1, 1), order = 2, n = 4)
 De Boor, C. (2001). \emph{A Practical Guide to Splines (Revised Edition)}.
 Springer, New York.
 }
-
