@@ -104,7 +104,7 @@ variation diminishing spline approximation to the fit from stage A is
 constructed, thus simultaneously producing spline fits of order 2, 3 and 4,
 all of which are included in the output, a \code{\link{GeDS-Class}} object.
 A detailed description of the underlying algorithm can be found in
-Dimitrova et al. (2017).
+Dimitrova et al. (2023).
 
 As noted in \code{\link[=formula.GeDS]{formula}}, the argument \code{formula}
 allows the user to specify predictor models with two components, a spline
@@ -170,9 +170,9 @@ more knots being added before exiting stage A of GeDS.
 }
 \examples{
 ######################################################################
-# Generate a data sample for the response variable Y and the covariate
-# X assuming Poisson distributed error and log link function
-# See section 4.1 in Dimitrova et al. (2017)
+# Generate a data sample for the response variable Y and the covariate X
+# assuming Poisson distributed error and log link function
+# See section 4.1 in Dimitrova et al. (2023)
 set.seed(123)
 N <- 500
 f_1 <- function(x) (10*x/(1+100*x^2))*4+4
@@ -180,6 +180,10 @@ X <- sort(runif(N, min = -2, max = 2))
 # Specify a model for the mean of Y to include only a component
 # non-linear in X, defined by the function f_1
 means <- exp(f_1(X))
+
+#############
+## POISSON ##
+#############
 # Generate Poisson distributed Y according to the mean model
 Y <- rpois(N, means)
 
@@ -211,10 +215,32 @@ knots(Gmod, n = 4)
 coef(Gmod, n = 4)
 deviance(Gmod, n = 4)
 
+###########
+## GAMMA ##
+###########
+# Generate Gamma distributed Y according to the mean model
+Y <- rgamma(N, shape = means, rate = 0.1)
+# Fit a Gamma GeDS regression using GGeDS
+Gmod <- GGeDS(Y ~ f(X), beta = 0.1, phi = 0.995, family =  Gamma(log),
+              Xextr = c(-2,2))
+plot(Gmod, f = function(x) exp(f_1(x))/0.1)
+
+##############
+## BINOMIAL ##
+##############
+# Generate Binomial distributed Y according to the mean model
+eta <- f_1(X) - 4
+means <- exp(eta)/(1+exp(eta))
+Y <- rbinom(N, size = 50, prob = means) / 50
+# Fit a Binomial GeDS regression using GGeDS
+Gmod <- GGeDS(Y ~ f(X), beta = 0.1, phi = 0.995, family =  "binomial",
+              Xextr = c(-2,2))
+plot(Gmod, f = function(x) exp(f_1(x) - 4)/(1 + exp(f_1(x) - 4)))
+
 
 ##########################################
 # A real data example
-# See Dimitrova et al. (2017), Section 4.2
+# See Dimitrova et al. (2023), Section 4.2
 
 data("coalMining")
 (Gmod2 <- GGeDS(formula = accidents ~ f(years), beta = 0.1, phi = 0.98,
@@ -233,7 +259,7 @@ legend("topright", c("phi = 0.98","phi = 0.985"), col = c("red", "blue"),
 ##########################################
 # The same regression in the example of GeDS
 # but assuming Gamma and Poisson responses
-# See Dimitrova et al. (2017), Section 4.2
+# See Dimitrova et al. (2023), Section 4.2
 
 data('BaFe2As2')
 (Gmod4 <- GGeDS(intensity ~ f(angle), data = BaFe2As2, beta = 0.6, phi = 0.995, q = 3,
@@ -247,7 +273,7 @@ plot(Gmod5)
 
 ##########################################
 # Life tables
-# See Dimitrova et al. (2017), Section 4.2
+# See Dimitrova et al. (2023), Section 4.2
 
 data(EWmortality)
 attach(EWmortality)
@@ -289,7 +315,7 @@ Z <- rpois(400, lambda)
 data <- data.frame(X, Y, Z)
 
 # Fit a Poisson GeDS regression using GGeDS
-BivGeDS <- GGeDS(Z ~ f(X,Y), beta = 0.3, phi = 0.9, family = "poisson",
+BivGeDS <- GGeDS(Z ~ f(X,Y), beta = 0.2, phi = 0.995, family = "poisson",
 Xextr = c(0, 3), Yextr = c(0, 3))
 
 # MSEs w.r.t data
@@ -317,7 +343,8 @@ DOI: \doi{10.1007/s00180-015-0621-7}
 
 Dimitrova, D. S., Kaishev, V. K., Lattuada, A. and Verrall, R. J.  (2023).
 Geometrically designed variable knot splines in generalized (non-)linear
-models. \emph{Applied Mathematics and Computation}, \strong{436}. \cr
+models.
+\emph{Applied Mathematics and Computation}, \strong{436}. \cr
 DOI: \doi{10.1016/j.amc.2022.127493}
 }
 \seealso{

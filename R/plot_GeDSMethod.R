@@ -134,12 +134,12 @@
 #' @export 
 #' @importFrom plot3D persp3D points3D
 #' 
-#' @aliases plot.GeDS
+#' @aliases plot.GeDS plot,GeDS-method plot,GeDS,ANY-method
 
-setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FALSE, ask = FALSE,
-                                                   main, legend.pos = "topright",
-                                                   new.window = FALSE, wait = 0.5,
-                                                   n=3L, type = c("none", "Polygon", "NCI", "ACI"), ...)
+setMethod("plot", signature(x = "GeDS"), function(x, f = NULL, which, DEV = FALSE, ask = FALSE,
+                                                  main, legend.pos = "topright",
+                                                  new.window = FALSE, wait = 0.5,
+                                                  n=3L, type = c("none", "Polygon", "NCI", "ACI"), ...)
 {
   results <- list()
   results$terms <- x$terms
@@ -193,19 +193,23 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
   maxim <- nrow(x$Stored) # number of iterations in stage A
   others <- list(...) # other arguments passed to the function
   
+  # Data arguments
+  col_data <- if (is.null(others$col)) "black" else others$col
+  pch_data <- if (is.null(others$pch)) 1 else others$pch
+  
   ########################
   ## 1. Univariate GeDS ##
   ########################
   if (x$Type == "LM - Univ" || x$Type == "GLM - Univ") {
     
     # Set plot color, default to "red" if not specified in additional arguments
-    col <- if ("col" %in% names(others)) others$col else "red"
-    others$col = NULL # remove 'col' from additional arguments to prevent conflicts
+    col_lines <- if ("col_lines" %in% names(others)) others$col_lines else "red"
+    others$col_lines = NULL # remove 'col_lines' from additional arguments to prevent conflicts
     
     # Set default iteration(s) to plot to k + 1 if not specified
     if (missing(which)) which <- x$Nintknots + 1
     # If which == "all", plot all stage A iterations
-    if (length(which) == 1) if (which == "all") which <- 1:(maxim)
+    if (length(which) == 1 && which == "all") which <- 1:(maxim)
     # Independent variable extremes
     extr <- x$Args$extr
     
@@ -278,7 +282,7 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
         # Obtain stage A knots and perform spline regression
         ik <- na.omit(x$Stored[i,-c(1,2,(i+2),(i+3))])
         # Stage B.1 (averaging knot location)
-        knt <- makenewknots(ik, n)
+        knt <- if ( i> 1) makenewknots(ik, n) else NULL
         # Stage B.2
         temp <- SplineReg_LM(X = X, Y = Y, Z = Z, offset = offset, weights = weights, extr = extr,
                              InterKnots = knt, n = n)
@@ -288,7 +292,7 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
         results$predicted <- temp$Predicted
         
         # Plot the spline
-        lines(X, temp$Predicted, col = col)
+        lines(X, temp$Predicted, col = col_lines)
         rug(c(knt, rep(extr,n))) # add a rug plot for knots
         
         ## Each branch now adds specific elements to the plot based on the selected type
@@ -301,8 +305,8 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
           points(temp$Poly$Kn,temp$Poly$Thetas, col = "blue")
           
           if(draw.legend) legend(legend.pos, c("Data", toprint, "Polygon", f_legend), lty = c(NA, 1, 2, f_lty),
-                                 col = c("black", col, "blue", f_col), pch = c(1, NA, 1, f_pch),
-                                 lwd = c(NA, 1, 1, f_lwd))
+                                 col = c(col_data, col_lines, "blue", f_col), pch = c(pch_data, NA, 1, f_pch),
+                                 lwd = c(NA, 1, 1, f_lwd), bty = "n")
           
           # 2) Normal Confidence Intervals
         } else if(type == "NCI") {
@@ -313,8 +317,8 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
           results$CIlow <- temp$NCI$Low
           
           if(draw.legend) legend(legend.pos,c("Data", toprint, "CI", f_legend), lty = c(NA, 1, 2, f_lty),
-                                 col = c("black", col,"darkgrey", f_col), pch = c(1, NA, NA, f_pch),
-                                 lwd = c(NA, 1, 1, f_lwd))
+                                 col = c(col_data, col_lines,"darkgrey", f_col), pch = c(pch_data, NA, NA, f_pch),
+                                 lwd = c(NA, 1, 1, f_lwd), bty = "n")
           
           # 3) Asymptotic Confidence Intervals
         } else if (type == "ACI") {
@@ -325,13 +329,13 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
           results$CIlow <- temp$ACI$Low
           
           if(draw.legend) legend(legend.pos, c("Data", toprint, "CI", f_legend), lty = c(NA, 1, 2, f_lty),
-                                 col = c("black", col, "darkgrey", f_col), pch = c(1, NA, NA, f_pch),
-                                 lwd = c(NA, 1, 1, f_lwd))
+                                 col = c(col_data, col_lines, "darkgrey", f_col), pch = c(pch_data, NA, NA, f_pch),
+                                 lwd = c(NA, 1, 1, f_lwd), bty = "n")
           
         } else {
           if (draw.legend) legend(legend.pos, c("Data", toprint, f_legend), lty = c(NA, 1, f_lty),
-                                  col = c("black", col, f_col), pch = c(1, NA, f_pch),
-                                  lwd = c(NA, 1, f_lwd))
+                                  col = c(col_data, col_lines, f_col), pch = c(pch_data, NA, f_pch),
+                                  lwd = c(NA, 1, f_lwd), bty = "n")
         }
         
       }
@@ -377,7 +381,7 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
         results$pred <- temp$Predicted
         
         # Plot the spline
-        lines(X, temp$Predicted, col = col)
+        lines(X, temp$Predicted, col = col_lines)
         rug(c(knt, rep(extr,n))) # add a rug plot for knots
         
         ## Each branch now adds specific elements to the plot based on the selected type
@@ -388,8 +392,8 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
           lines(results$Polykn, results$Polyth, col = "blue", lty = 2)
           points(results$Polykn, results$Polyth, col = "blue")
           if(draw.legend) legend(legend.pos, c("Data", toprint, "Polygon", f_legend), lty = c(NA, 1, 2, f_lty),
-                                 col = c("black", col, "blue", f_col), pch = c(1, NA, 1, f_pch),
-                                 lwd = c(NA, 1, 1, f_lwd))
+                                 col = c(col_data, col_lines, "blue", f_col), pch = c(pch_data, NA, 1, f_pch),
+                                 lwd = c(NA, 1, 1, f_lwd), bty = "n")
           
           # 2) Normal Confidence Intervals
         } else if(type=="NCI") {
@@ -415,8 +419,8 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
           results$CIlow <- CIlow
           
           if(draw.legend) legend(legend.pos, c("Data", toprint, "CI", f_legend), lty = c(NA, 1, 2, f_lty),
-                                 col = c("black", col, "darkgrey", f_col), pch = c(1, NA, NA, f_pch),
-                                 lwd = c(NA, 1, 1, f_lwd))
+                                 col = c(col_data, col_lines, "darkgrey", f_col), pch = c(pch_data, NA, NA, f_pch),
+                                 lwd = c(NA, 1, 1, f_lwd), bty = "n")
           
           # 3) Asymptotic Confidence Intervals
         } else if (type=="ACI") {
@@ -430,12 +434,12 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
           lines(X, CIlow, col="darkgrey", lty = 2)
           
           if(draw.legend) legend(legend.pos, c("Data", toprint, "CI", f_legend), lty = c(NA, 1, 2, f_lty),
-                                 col = c("black", col, "darkgrey", f_col), pch = c(1, NA, NA, f_pch),
-                                 lwd = c(NA, 1, 1, f_lwd))
+                                 col = c(col_data, col, "darkgrey", f_col), pch = c(pch_data, NA, NA, f_pch),
+                                 lwd = c(NA, 1, 1, f_lwd), bty = "n")
         } else {
           if (draw.legend) legend(legend.pos, c("Data", toprint, f_legend), lty = c(NA, 1, f_lty),
-                                  col = c("black", col, f_col), pch = c(1, NA, f_pch),
-                                  lwd = c(NA, 1, f_lwd))
+                                  col = c(col_data, col_lines, f_col), pch = c(pch_data, NA, f_pch),
+                                  lwd = c(NA, 1, f_lwd), bty = "n")
           
         }
       }
@@ -527,7 +531,8 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
              legend = c("Data", "Quadratic Fit"),
              col = c("black", "red"),
              pch = 19,
-             bg = 'white')
+             bg = 'white',
+             bty = "n")
       
     } else {
       
@@ -569,7 +574,8 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
              legend = c("Z >= f_hat(X,Y)", "Z  <  f_hat(X,Y)"),
              col = c("red", "blue"),
              pch = 19,
-             bg = 'white')
+             bg = 'white',
+             bty = "n")
     }
     
   } else {
@@ -580,4 +586,7 @@ setMethod("plot", signature(x = "GeDS"),  function(x, f = NULL, which, DEV = FAL
   invisible(x)
 }
 )
+
+
+
 

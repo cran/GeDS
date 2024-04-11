@@ -3,7 +3,6 @@
 \docType{package}
 \name{GeDS-package}
 \alias{GeDS-package}
-\alias{_PACKAGE}
 \alias{GeDS}
 \title{GeDS}
 \description{

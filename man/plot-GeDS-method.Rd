@@ -3,6 +3,7 @@
 \name{plot,GeDS-method}
 \alias{plot,GeDS-method}
 \alias{plot.GeDS}
+\alias{plot,GeDS,ANY-method}
 \title{Plot method for GeDS objects.}
 \usage{
 \S4method{plot}{GeDS}(

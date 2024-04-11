@@ -1,7 +1,7 @@
 Package: GeDS
 Type: Package
 Title: Geometrically Designed Spline Regression
-Version: 0.2.0
+Version: 0.2.1
 Date: 2024-03-23
 Author: Dimitrina S. Dimitrova <D.Dimitrova@city.ac.uk>,
   Emilio S. Guillen <Emilio.Saenz-Guillen@bayes.city.ac.uk>,
@@ -34,6 +34,6 @@ Encoding: UTF-8
 Imports: doFuture, doParallel, doRNG, foreach, future, MASS, mboost,
         plot3D, TH.data
 NeedsCompilation: yes
-Packaged: 2024-03-23 22:39:09 UTC; ESaenz
+Packaged: 2024-04-11 21:33:19 UTC; ESaenz
 Repository: CRAN
-Date/Publication: 2024-03-24 15:50:02 UTC
+Date/Publication: 2024-04-11 22:00:02 UTC

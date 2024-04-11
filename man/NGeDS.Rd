@@ -199,7 +199,7 @@ plot(Gmod2)
 
 #########################################
 # bivariate example
-# See Dimitrova et al. (2017), section 5
+# See Dimitrova et al. (2023), section 5
 
 # Generate a data sample for the response variable
 # Z and the covariates X and Y assuming Normal noise
@@ -216,6 +216,7 @@ Z <- Z+rnorm(400, 0, sd = 0.1)
 (BivGeDS <- NGeDS(Z ~ f(X, Y) , phi = 0.9, beta = 0.3,
 Xextr = c(0, 3), Yextr = c(0, 3)))
 
+# Extract quadratic coefficients/knots/deviance
 coef(BivGeDS, n = 3)
 knots(BivGeDS, n = 3)
 deviance(BivGeDS, n = 3)
