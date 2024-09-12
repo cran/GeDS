@@ -3,7 +3,7 @@
 ############################## Univariate Fitters ##############################
 ################################################################################
 ################################################################################
-#' @title Functions used to fit GeDS objects w/univariate spline regression
+#' @title Functions used to fit GeDS objects with an univariate spline regression
 #' component
 #' @name UnivariateFitters
 #' @aliases Fitters UnivariateFitter GenUnivariateFitter
@@ -66,7 +66,7 @@
 #' \code{TRUE}.
 #' @param intknots vector of initial internal knots from which to start the GeDS
 #' Stage A iterations. See Section 3 of Kaishev et al. (2016). Default is \code{NULL}.
-#' @param only_predictions logical, if \code{TRUE} only predictions are computed.
+#' @param only_pred logical, if \code{TRUE} only predictions are computed.
 #' 
 #' @return A \code{\link{GeDS-Class}} object, but without the \code{Formula},
 #' \code{extcall}, \code{terms} and \code{znames} slots.
@@ -148,7 +148,7 @@ UnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0,NROW(Y)),
                              min.intknots = 0, max.intknots = 300, q = 2,
                              extr = range(X), show.iters = FALSE,
                              tol = as.double(1e-12), stoptype = c("SR","RD","LR"),
-                             higher_order = TRUE, intknots = NULL, only_predictions = FALSE)
+                             higher_order = TRUE, intknots = NULL, only_pred = FALSE)
   {
   # Capture the function call
   save <- match.call()
@@ -289,7 +289,8 @@ UnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0,NROW(Y)),
     ## STEP 4: calculate the normalized within-cluster means and ranges ##
     ######################################################################
     means <- means/max(means)
-    wc.range <- wc.range/max(wc.range)
+    # If the residual clusters are all singletons then all the wc.ranges will equal 0, and we cannot divide by 0
+    if (max(wc.range) != 0) wc.range <- wc.range/max(wc.range) 
     
     ###########################################
     ## STEP 5: calculate the cluster weights ##
@@ -301,6 +302,10 @@ UnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0,NROW(Y)),
     ###############
     newknot <- Knotnew(wht = w, restmp = res.weighted, x = distinctX, dcm = dcum,
                        oldknots = c(rep(extr, 2 + 1), intknots), tol = tol)[1]
+    if (newknot %in% extr || is.na(newknot)){
+      
+      break
+    }
     intknots <- c(intknots, newknot)
     
     # Print iteration
@@ -327,11 +332,11 @@ UnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0,NROW(Y)),
     iter <- j
     } else if (j <= max.intknots) {
       # Eliminate NAs in previous
-      previous <- previous[-((j+1):(max.intknots+1)), ] # eliminate all the NA rows
-      previous <- previous[ ,-((j+4):(max.intknots+4))] #  k = j - 1 internal knots (i.e. k + 4 = j + 3 knots) in the last iteration
+      previous <- previous[-((j+1):(max.intknots+1)), , drop = FALSE] # eliminate all the NA rows
+      previous <- previous[ ,-((j+4):(max.intknots+4)), drop = FALSE] #  k = j - 1 internal knots (i.e. k + 4 = j + 3 knots) in the last iteration
       # Eliminate NAs in oldcoef
-      oldcoef  <- oldcoef[-((j+1):(max.intknots+1)), ]  # eliminate all the NA rows
-      oldcoef  <- oldcoef[ ,1:(j+1+nz)]                 # p = n + k = j + 1  B-splines
+      oldcoef  <- oldcoef[-((j+1):(max.intknots+1)), , drop = FALSE]  # eliminate all the NA rows
+      oldcoef  <- oldcoef[ , 1:(j+1+nz), drop = FALSE]                # p = n + k = j + 1  B-splines
       iter <- j - q
     }
   
@@ -340,14 +345,14 @@ UnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0,NROW(Y)),
     warning("Too few internal knots found: Linear spline will be computed with NULL internal knots. Try to set a different value for 'q' or a different treshold")
     ll <- NULL
     lin <- SplineReg_LM(X = X, Y = Y, Z = Z, offset = offset, weights = weights, InterKnots = ll, n = 2, extr = extr,
-                        only_predictions = only_predictions)
+                        only_pred = only_pred)
     } else {
       ik <- as.numeric(na.omit(previous[iter, -c(1, 2, iter + 2, iter + 3)])) # keep the internal knots in the "iter"th row
       # Stage B.1 (averaging knot location)
       ll <- makenewknots(ik, 2)
       # Stage B.2
       lin <- SplineReg_LM(X = X, Y = Y, Z = Z, offset = offset, weights = weights, InterKnots = ll, n = 2, extr = extr,
-                          only_predictions = only_predictions)
+                          only_pred = only_pred)
     }
   #######################
   ## Higher order fits ##
@@ -381,7 +386,7 @@ UnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0,NROW(Y)),
   
   out <- list("Type" = "LM - Univ", "Linear.IntKnots" = ll, "Quadratic.IntKnots" = qq, "Cubic.IntKnots" = cc,
               "Dev.Linear" = lin$RSS, "Dev.Quadratic" = squ$RSS, "Dev.Cubic" = cub$RSS,
-              "RSS" = RSSnew, "Linear" = lin, "Quadratic" = squ, "Cubic" = cub, "Stored" = previous,
+              "RSS" = RSSnew, "Linear.Fit" = lin, "Quadratic.Fit" = squ, "Cubic.Fit" = cub, "Stored" = previous,
               "Args"= args, "Call"= save, "Nintknots" = iter - 1, "iters" = j, "Guesses" = NULL,
               "Coefficients" = oldcoef, stopinfo = list("phis" = phis, "phis_star" = phis_star, "oldintc" = oldintc, "oldslp" = oldslp))
 
@@ -512,7 +517,7 @@ GenUnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)),
     
     # Store residuals and deviance 
     res.tmp <- first.deg$Residuals
-    RSS.tmp <- first.deg$temporary$lastdeviance
+    RSS.tmp <- first.deg$temporary$deviance
     RSSnew <- c(RSSnew, RSS.tmp)
     # Working weights (weights in the final iteration of the IRLS fit)
     working.weights <- first.deg$temporary$weights  
@@ -604,7 +609,8 @@ GenUnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)),
     ## STEP 5: calculate the normalized within-cluster means and ranges ##
     ######################################################################
     means    <- means/max(means)
-    wc.range <- wc.range/max(wc.range)
+    # If the residual clusters are all singletons then all the wc.ranges will equal 0, and we cannot divide by 0
+    if (max(wc.range) != 0) wc.range <- wc.range/max(wc.range)
     
     ###########################################
     ## STEP 6: calculate the cluster weights ##
@@ -648,11 +654,11 @@ GenUnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)),
     iter <- j
   } else if (j <= max.intknots) {
     # Eliminate NAs in previous
-    previous <- previous[-((j+1):(max.intknots+1)), ] # eliminate all the NA rows
-    previous <- previous[ ,-((j+4):(max.intknots+4))] #  k = j - 1 internal knots (i.e. k + 4 = j + 3 knots) in the last iteration
+    previous <- previous[-((j+1):(max.intknots+1)), , drop = FALSE] # eliminate all the NA rows
+    previous <- previous[ ,-((j+4):(max.intknots+4)), drop = FALSE] #  k = j - 1 internal knots (i.e. k + 4 = j + 3 knots) in the last iteration
     # Eliminate NAs in oldcoef
-    oldcoef  <- oldcoef[-((j+1):(max.intknots+1)), ]  # eliminate all the NA rows
-    oldcoef  <- oldcoef[ ,1:(j+1+nz)]                 # p = n + k = j + 1  B-splines
+    oldcoef  <- oldcoef[-((j+1):(max.intknots+1)), , drop = FALSE]  # eliminate all the NA rows
+    oldcoef  <- oldcoef[ ,1:(j+1+nz), drop = FALSE]                 # p = n + k = j + 1  B-splines
     iter <- j - q
   }
   
@@ -719,7 +725,7 @@ GenUnivariateFitter <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)),
   
   out <- list("Type" = "GLM - Univ", "Linear.IntKnots" = ll, "Quadratic.IntKnots" = qq, "Cubic.IntKnots" = cc,
               "Dev.Linear" = lin$RSS, "Dev.Quadratic" = squ$RSS, "Dev.Cubic" = cub$RSS, "Knots" = intknots,
-              "RSS" = RSSnew, "Linear" = lin, "Quadratic" = squ, "Cubic" = cub, "Stored" = previous,
+              "RSS" = RSSnew, "Linear.Fit" = lin, "Quadratic.Fit" = squ, "Cubic.Fit" = cub, "Stored" = previous,
               "Args" = args, "Call" = save, "Nintknots" = iter - 1, "iters" = j, "Guesses" = oldguess,
               "Coefficients" = oldcoef, "deviance" = devianceTracking, "iterIrls" = irlsAccumIterCount,
               stopinfo = list("phis" = phis,"phis_star" = phis_star, "oldintc" = oldintc, "oldslp" = oldslp))

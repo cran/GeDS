@@ -15,17 +15,18 @@
 #' equal to \code{3L}. Non-integer values will be passed to the function
 #' \code{\link{as.integer}}.
 #' @param onlySpline logical variable specifying whether only the coefficients
-#' for the GeDS  component of the fitted multivariate regression model should be
-#' extracted or alternatively also the coefficients of the parametric component
+#' for the GeDS  component of a fitted multivariate regression model should be
+#' extracted or if, alternatively, also the coefficients of the parametric component
 #' should also be extracted.
 #' @param ... potentially further arguments (required by the definition of the
-#' generic function). They will be ignored, but with a warning.
+#' generic function). These will be ignored, but with a warning.
 #' 
 #' @return A named vector containing the required coefficients of the fitted
-#' multivariate predictor model. The coefficients corresponding to the variables
-#' that enter the parametric component of the fitted multivariate predictor model
-#' are named as the variables themselves. The  coefficients of the GeDS component
-#' are coded as "\code{N}" followed by the index of the corresponding B-spline.
+#' univariate or multivariate predictor model. The coefficients corresponding to
+#' the variables that enter the parametric component of the fitted multivariate
+#' predictor model are named as the variables themselves. The  coefficients of
+#' the GeDS component are coded as "\code{N}" followed by the index of the
+#' corresponding B-spline.
 #'
 #' @details
 #' These are simple methods for the functions \code{\link[stats]{coef}} and
@@ -37,11 +38,12 @@
 #' \code{n}.
 #'
 #' As mentioned in the details of \code{\link[=formula.GeDS]{formula}}, the
-#' predictor model may be multivariate and it may include a GeD spline component
-#' whereas the remaining variables may be part of a parametric component. If the
-#' \code{onlySpline} argument is set to \code{TRUE} (the default value), only
-#' the coefficients corresponding to the GeD spline component of order \code{n}
-#' of the multivariate predictor model are extracted.
+#' predictor model may be multivariate and it may include a (univariate or
+#' bivariate) GeD spline component whereas the remaining variables may be part
+#' of a parametric component. If the \code{onlySpline} argument is set to
+#' \code{TRUE} (the default value), only the coefficients corresponding to the
+#' GeD spline component of order \code{n} of the multivariate predictor model 
+#' are extracted.
 #' 
 #' @examples
 #' # Generate a data sample for the response variable
@@ -91,27 +93,27 @@ coef.GeDS <- function(object, n = 3L, onlySpline = TRUE, ...)
   
   # 1. Linear
   if(n == 2L) {
-    theta <- object$Linear$Theta
+    theta <- object$Linear.Fit$Theta
     if (object$Type == "LM - Univ" || object$Type == "GLM - Univ") {
-      nth <- length(object$Linear$Polygon$Kn)
+      nth <- length(object$Linear.Fit$Polygon$Kn)
       } else if (object$Type == "LM - Biv" || object$Type == "GLM - Biv") {
-        nth <- NCOL(object$Linear$XBasis) * NCOL(object$Linear$YBasis)
+        nth <- NCOL(object$Linear.Fit$XBasis) * NCOL(object$Linear.Fit$YBasis)
         }
   # 2. Quadratic
     } else if (n == 3L) {
-      theta <- object$Quadratic$Theta
+      theta <- object$Quadratic.Fit$Theta
       if (object$Type == "LM - Univ" || object$Type == "GLM - Univ") {
-        nth <- length(object$Quadratic$Polygon$Kn)
+        nth <- length(object$Quadratic.Fit$Polygon$Kn)
         } else if (object$Type == "LM - Biv" || object$Type == "GLM - Biv") {
-          nth <- NCOL(object$Quadratic$XBasis) * NCOL(object$Quadratic$YBasis)
+          nth <- NCOL(object$Quadratic.Fit$XBasis) * NCOL(object$Quadratic.Fit$YBasis)
           }
   # 3. Cubic
       } else if (n == 4L) {
-        theta <- object$Cubic$Theta
+        theta <- object$Cubic.Fit$Theta
         if (object$Type == "LM - Univ" || object$Type == "GLM - Univ") {
-          nth <- length(object$Cubic$Polygon$Kn)
+          nth <- length(object$Cubic.Fit$Polygon$Kn)
           } else if (object$Type == "LM - Biv" || object$Type == "GLM - Biv") {
-            nth <- NCOL(object$Cubic$XBasis) * NCOL(object$Cubic$YBasis)
+            nth <- NCOL(object$Cubic.Fit$XBasis) * NCOL(object$Cubic.Fit$YBasis)
           }
       }
   
@@ -149,11 +151,11 @@ coefficients.GeDS <- function(object, n = 3L, onlySpline = TRUE, ...){
 #' extracted. By default equal to \code{3L}. Non-integer values will be passed
 #' to the function \code{\link{as.integer}}.
 #' @param ... potentially further arguments (required by the definition of the
-#' generic function). They will be ignored, but with a warning.
+#' generic function). These will be ignored, but with a warning.
 #' 
 #' @return A numeric value corresponding to the  deviance of the selected
 #' GeDS/GeDSboost/GeDSgam fit.
-#' #' 
+#' 
 #' @details
 #' This is a method for the function \code{\link[stats]{deviance}}. As
 #' \code{\link{GeDS-class}}, \code{\link{GeDSboost-class}} and
@@ -183,13 +185,13 @@ deviance.GeDS <- function(object, n = 3L, ...)
   
   # 1. Linear
   if(n == 2L) {
-    dev <- object$Linear$RSS
+    dev <- object$Linear.Fit$RSS
   # 2. Quadratic
     } else if (n == 3L) {
-      dev <- object$Quadratic$RSS
+      dev <- object$Quadratic.Fit$RSS
   # 3. Cubic
       } else if(n == 4L) {
-        dev <- object$Cubic$RSS
+        dev <- object$Cubic.Fit$RSS
       }
   
   dev <- as.numeric(dev)
@@ -295,7 +297,7 @@ knots.GeDS <- function(Fn, n = 3L, options = c("all","internal"), ...)
 #' default it is equal to \code{"response"}, i.e. the result is on the scale of
 #' the response variable. See details for the other options.
 #' @param n integer value (2, 3 or 4) specifying the order (\eqn{=} degree
-#' \eqn{+ 1}) of the GeDS fit whose predicted values should be computed. By
+#' \eqn{ + 1}) of the GeDS fit whose predicted values should be computed. By
 #' default equal to \code{3L}. Non-integer values will be passed to the function
 #' \code{\link{as.integer}}.
 #' @param ... potentially further arguments (required by the definition of the

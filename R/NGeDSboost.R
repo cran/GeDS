@@ -6,7 +6,7 @@
 #' @title Component-wise gradient boosting with NGeDS base-learners
 #' @name NGeDSboost
 #' @description
-#' \code{NGeDSboost} performs component-wise gradient boosting (Bühlmann and Yu
+#' \code{NGeDSboost} implements component-wise gradient boosting (Bühlmann and Yu
 #' (2003), Bühlmann and Hothorn (2007)) using normal GeD splines (i.e., fitted
 #' with \code{\link{NGeDS}} function) as base-learners (see Dimitrova et al. (2024)).
 #' @param formula a description of the structure of the model to be fitted,
@@ -14,14 +14,6 @@
 #' and \code{\link{GGeDS}}, the formula specified allows for multiple additive
 #' GeD spline regression components (as well as linear components) to be
 #' included (e.g., \code{Y ~ f(X1) + f(X2) + X3}).
-#' See \code{\link[=formula.GeDS]{formula}} for further details.
-#' @param family determines the loss function to be optimized by the boosting
-#' algorithm. In case \code{initial_learner = FALSE} it also determines the
-#' corresponding empirical risk minimizer to be used as offset initial learner.
-#' By default, it is set to \code{mboost::Gaussian()}. Users can specify any
-#' \code{\link[mboost]{Family}} object from the \pkg{mboost} package.
-#' @param link in case the \code{\link[mboost]{Family}} object has not the desired
-#' link function you can specify it here.
 #' @param data a data frame containing the variables referenced in the formula.
 #' @param weights an optional vector of `prior weights' to be put on the
 #' observations during the fitting process. It should be \code{NULL} or a
@@ -30,14 +22,20 @@
 #' @param normalize_data a logical that defines whether the data should be
 #' normalized (standardized) before fitting the baseline linear model, i.e.,
 #' before running the FGB algorithm. Normalizing the data involves scaling the
-#' predictor variables to have a mean of 0 and a standard deviation of 1. This
-#' process alters the scale and interpretation of the knots and coefficients
-#' estimated. Default is equal to \code{FALSE}.
+#' predictor variables to have a mean of 0 and a standard deviation of 1. Note
+#' that this process alters the scale and interpretation of the knots and
+#' coefficients estimated. Default is equal to \code{FALSE}.
+#' @param family determines the loss function to be optimized by the boosting
+#' algorithm. In case \code{initial_learner = FALSE} it also determines the
+#' corresponding empirical risk minimizer to be used as offset initial learner.
+#' By default, it is set to \code{mboost::Gaussian()}. Users can specify any
+#' \code{\link[mboost]{Family}} object from the \pkg{mboost} package.
+#' @param link in case the \code{\link[mboost]{Family}} object has not
+#' the desired link function you can specify it here.
 #' @param initial_learner a logical value. If set to \code{TRUE}, the model's
-#' initial learner will be a normal GeD spline. If set to FALSE, then the
+#' initial learner will be a GeD spline. If set to \code{FALSE}, then the
 #' initial predictor will consist of the empirical risk minimizer corresponding
-#' to the specified family. Note that if \code{initial_learner = TRUE},
-#' \code{family} must be \code{mboost::Gaussian()}.
+#' to the specified \code{family}. 
 #' @param int.knots_init optional parameter allowing the user to set a
 #' maximum number of internal knots to be added by the initial GeDS learner in
 #' case \code{initial_learner = TRUE}. Default is equal to \code{2L}.
@@ -260,9 +258,9 @@
 NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
                        family = mboost::Gaussian(), link = NULL, initial_learner = TRUE,
                        int.knots_init = 2L, min_iterations,
-                       max_iterations, shrinkage = 1, beta = 0.5,
-                       phi = 0.99, int.knots_boost = 500L, q = 2L,
+                       max_iterations, shrinkage = 1,
                        phi_boost_exit = 0.99, q_boost = 2L,
+                       beta = 0.5, phi = 0.99, int.knots_boost = 500L, q = 2L,
                        higher_order = TRUE, boosting_with_memory = FALSE)
   {
   # Capture the function call
@@ -270,6 +268,9 @@ NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
   
   # Models list
   models <- list()
+  
+  # Convert integer variables to numeric
+  data <- data.frame(lapply(data, function(x) if(is.integer(x)) as.numeric(x) else x))
   
   # Formula
   read.formula <- read.formula.boost(formula, data)
@@ -672,11 +673,11 @@ NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
         } else {
           # Combine new intervals with coefficients from the piecewise polynomial
           new_aux <- data.frame(intervals)
-          # find the positions of elements in new_aux$end relative to the intervals defined by c(-Inf, new_int.knt, Inf)
-          new_aux$interval <- findInterval(new_aux$end, c(-Inf, new_int.knt, Inf)) 
-          # adjust the interval indices for those new_aux$end values that exactly match the knots in new_int.knt
-          # each new_int.knt yields 2 pairs of coef; the 1st pair corresponds to X < new_int.knt, the 2nd to X > new_int.knt
-          new_aux$interval[new_aux$end %in% new_int.knt] <- new_aux$interval[new_aux$end %in% new_int.knt] - 1
+          # find the positions of elements in new_aux$end relative to the intervals defined by c(-Inf, int.knt, Inf)
+          new_aux$interval <- findInterval(new_aux$end, c(-Inf, int.knt, Inf)) 
+          # adjust the interval indices for those new_aux$end values that exactly match the knots in int.knt
+          # each int.knt yields 2 pairs of coef; the 1st pair corresponds to X < int.knt, the 2nd to X > int.knt
+          new_aux$interval[new_aux$end %in% int.knt] <- new_aux$interval[new_aux$end %in% int.knt] - 1
           
           new_aux$b0 <- b0[new_aux$interval]
           new_aux$b1 <- b1[new_aux$interval]
@@ -771,7 +772,6 @@ NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
     }
   }
   
-  
   ## 7. Set the "final model" to be the one with lower deviance
   # 7.1. De-normalize predictions if necessary
   if (normalize_data == TRUE && family@name != "Negative Binomial Likelihood (logit link)") {
@@ -847,14 +847,17 @@ NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
     if (args$initial_learner) offset <- rep(0, NROW(args$response[[response]])) else offset <- models$model0$F_hat
 
     linear_fit <- tryCatch({
-      SplineReg_Multivar(X = args$predictors[GeDS_variables], Y = args$response[[response]],
-                         Z = args$predictors[linear_variables], offset = offset,
-                         base_learners = bSpline.base_learners, weights = weights,
-                         InterKnotsList = ll_list, n = 2, family = args$family, link = args$link,
-                         coefficients = theta, linear_intercept = TRUE)}, error = function(e) {
-                           cat(paste0("Error computing linear fit:", e))
-                           return(NULL)
-                           })
+      suppressMessages(
+        SplineReg_Multivar(X = args$predictors[GeDS_variables], Y = args$response[[response]],
+                           Z = args$predictors[linear_variables], offset = offset,
+                           base_learners = bSpline.base_learners, InterKnotsList = ll_list,
+                           n = 2, family = args$family, link = args$link,
+                           coefficients = theta, linear_intercept = TRUE)
+        )
+      }, error = function(e) {
+        cat(paste0("Error computing linear fit:", e))
+        return(NULL)
+        })
     
     # De-normalize if necessary
     if (normalize_data == TRUE && family@name != "Negative Binomial Likelihood (logit link)") {
@@ -862,6 +865,8 @@ NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
     }
     
     final_model$Linear.Fit <- linear_fit
+  } else {
+    final_model$Linear.Fit <- "When using bivariate base-learners, a single spline representation (in pp form or B-spline form) of the boosted fit is not available."
   }
   
   pred_linear <- as.numeric(final_model$Y_hat)
@@ -875,13 +880,16 @@ NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
     qq_list <- compute_avg_int.knots(final_model, base_learners = base_learners,
                                    args$X_sd, args$X_mean, normalize_data, n = 3)
     quadratic_fit <- tryCatch({
-      SplineReg_Multivar(X = args$predictors[GeDS_variables], Y = args$response[[response]],
-                         Z = args$predictors[linear_variables], base_learners = args$base_learners,
-                         weights = weights, InterKnotsList = qq_list,
-                         n = 3, family = args$family, link = args$link)}, error = function(e) {
-                           cat(paste0("Error computing quadratic fit:", e))
-                           return(NULL)
-                           })
+      suppressMessages(
+        SplineReg_Multivar(X = args$predictors[GeDS_variables], Y = args$response[[response]],
+                           Z = args$predictors[linear_variables], base_learners = args$base_learners,
+                           InterKnotsList = qq_list, # weights = weights: if knots were already found setting prior weights on observations, no need of weighting again
+                           n = 3, family = args$family, link = args$link)
+        )
+      }, error = function(e) {
+        cat(paste0("Error computing quadratic fit:", e))
+        return(NULL)
+        })
     final_model$Quadratic.Fit <- quadratic_fit
     pred_quadratic <- as.numeric(quadratic_fit$Predicted)
     
@@ -889,13 +897,16 @@ NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
     cc_list <- compute_avg_int.knots(final_model, base_learners = base_learners,
                                    args$X_sd, args$X_mean, normalize_data, n = 4)
     cubic_fit <- tryCatch({
-      SplineReg_Multivar(X = args$predictors[GeDS_variables], Y = args$response[[response]],
-                         Z = args$predictors[linear_variables], base_learners = args$base_learners,
-                         weights = weights, InterKnotsList = cc_list,
-                         n = 4, family = args$family, link = args$link)}, error = function(e) {
-                           cat(paste0("Error computing cubic fit:", e))
-                           return(NULL)
-                           })
+      suppressMessages(
+        SplineReg_Multivar(X = args$predictors[GeDS_variables], Y = args$response[[response]],
+                           Z = args$predictors[linear_variables], base_learners = args$base_learners,
+                           InterKnotsList = cc_list, # weights = weights: if knots were already found setting prior weights on observations, no need of weighting again
+                           n = 4, family = args$family, link = args$link)
+        )
+      }, error = function(e) {
+        cat(paste0("Error computing cubic fit:", e))
+        return(NULL)
+        })
     final_model$Cubic.Fit <- cubic_fit
     pred_cubic <- as.numeric(cubic_fit$Predicted)
     
@@ -965,9 +976,16 @@ componentwise_fit <- function(bl_name, response, data, model_formula_template, f
   
   ## (A) GeDS base-learners
   if (base_learners[[bl_name]]$type == "GeDS") {
-    max.intknots <- if (length(pred_vars) == 1) internal_knots + length(starting_intknots)
-    else if (length(pred_vars) == 2 && internal_knots == 0) stop("internal_knots must be > 0 for bivariate learners")
-    else internal_knots + length(starting_intknots$ikX) + length(starting_intknots$ikY)
+    
+    max.intknots <- if (length(pred_vars) == 1) {
+      internal_knots + length(starting_intknots)
+      } else if (length(pred_vars) == 2) {
+        if (internal_knots == 0) {
+          stop("internal_knots must be > 0 for bivariate learners")
+          } else {
+            internal_knots + length(starting_intknots$ikX) + length(starting_intknots$ikY)
+          }
+      }
     
     model_formula <- formula(paste0(model_formula_template, bl_name))
     error <- FALSE
@@ -977,7 +995,7 @@ componentwise_fit <- function(bl_name, response, data, model_formula_template, f
           NGeDS(model_formula, data = data, weights = weights, beta = beta, phi = phi,
                 min.intknots = 0, max.intknots = max.intknots, q = q,
                 Xextr = NULL, Yextr = NULL, show.iters = FALSE, stoptype = "RD",
-                higher_order = FALSE, intknots = starting_intknots, only_predictions = TRUE)
+                higher_order = FALSE, intknots = starting_intknots, only_pred = TRUE)
           } else {
             GGeDS(model_formula, data = data, family = family, weights = weights,
                   beta = beta, phi = phi, min.intknots = 0, max.intknots = max.intknots,
@@ -1009,7 +1027,7 @@ componentwise_fit <- function(bl_name, response, data, model_formula_template, f
     error <- FALSE
     suppressWarnings({
       fit <- tryCatch(
-        lm(model_formula, data = data),
+        lm(model_formula, data = data, weights = weights),
         error = function(e) {
           message(paste0("Error occurred in lm() for base-learner ", bl_name, ": ", e))
           error <<- TRUE
