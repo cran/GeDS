@@ -1,8 +1,8 @@
 Package: GeDS
 Type: Package
 Title: Geometrically Designed Spline Regression
-Version: 0.2.5
-Date: 2025-01-21
+Version: 0.2.6
+Date: 2025-02-10
 Authors@R: c(person(given = c("Dimitrina", "S."),
                       family = "Dimitrova",
                       role = "aut",
@@ -41,7 +41,7 @@ License: GPL-3
 URL: https://github.com/emilioluissaenzguillen/GeDS
 BugReports: https://github.com/emilioluissaenzguillen/GeDS/issues
 LazyData: TRUE
-Depends: R (>= 3.0.1), Rcpp (>= 0.12.1), splines, stats, utils, Matrix,
+Depends: R (>= 3.5.0), Rcpp (>= 0.12.1), splines, stats, utils, Matrix,
         methods, mi, Rmpfr
 LinkingTo: Rcpp
 RoxygenNote: 7.3.2
@@ -49,11 +49,11 @@ Encoding: UTF-8
 Imports: doFuture, doParallel, doRNG, foreach, future, MASS, mboost,
         parallel, plot3D, TH.data
 NeedsCompilation: yes
-Packaged: 2025-01-21 16:06:46 UTC; emili
+Packaged: 2025-02-10 11:57:19 UTC; emili
 Author: Dimitrina S. Dimitrova [aut],
   Vladimir K. Kaishev [aut],
   Andrea Lattuada [aut],
   Emilio L. Sáenz Guillén [aut, cre],
   Richard J. Verrall [aut]
 Repository: CRAN
-Date/Publication: 2025-01-21 16:30:02 UTC
+Date/Publication: 2025-02-10 12:30:32 UTC

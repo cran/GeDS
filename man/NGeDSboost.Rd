@@ -85,7 +85,7 @@ Default is equal to \code{1}.}
 
 \item{phi_boost_exit}{numeric parameter in the interval \eqn{[0,1]}
 specifying the threshold for the boosting iterations stopping rule. Default
-is equal to \code{0.995}.}
+is equal to \code{0.99}.}
 
 \item{q_boost}{numeric parameter which allows to fine-tune the boosting
 iterations stopping rule, by default equal to \code{2L}.}
@@ -236,7 +236,7 @@ library(TH.data)
 data("bodyfat", package = "TH.data")
 
 Gmodboost <- NGeDSboost(formula = DEXfat ~ age + f(hipcirc, waistcirc) + f(kneebreadth),
-data = bodyfat)
+data = bodyfat, phi_boost_exit = 0.9, q_boost = 1, phi = 0.9, q = 1)
 
 MSE_Gmodboost_linear <- mean((bodyfat$DEXfat - Gmodboost$predictions$pred_linear)^2)
 MSE_Gmodboost_quadratic <- mean((bodyfat$DEXfat - Gmodboost$predictions$pred_quadratic)^2)

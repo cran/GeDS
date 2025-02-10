@@ -56,7 +56,7 @@
 #' Default is equal to \code{1}.
 #' @param phi_boost_exit numeric parameter in the interval \eqn{[0,1]}
 #' specifying the threshold for the boosting iterations stopping rule. Default
-#' is equal to \code{0.995}.
+#' is equal to \code{0.99}.
 #' @param q_boost numeric parameter which allows to fine-tune the boosting
 #' iterations stopping rule, by default equal to \code{2L}.
 #' @param beta numeric parameter in the interval \eqn{[0,1]} tuning the knot
@@ -194,7 +194,7 @@
 #' data("bodyfat", package = "TH.data")
 #' 
 #' Gmodboost <- NGeDSboost(formula = DEXfat ~ age + f(hipcirc, waistcirc) + f(kneebreadth),
-#' data = bodyfat)
+#' data = bodyfat, phi_boost_exit = 0.9, q_boost = 1, phi = 0.9, q = 1)
 #' 
 #' MSE_Gmodboost_linear <- mean((bodyfat$DEXfat - Gmodboost$predictions$pred_linear)^2)
 #' MSE_Gmodboost_quadratic <- mean((bodyfat$DEXfat - Gmodboost$predictions$pred_quadratic)^2)
@@ -769,7 +769,9 @@ NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
         cat("Stopping iterations due to small improvement in deviance\n\n")
         break
       }
+      # print(paste0("Boost iteration ", m, ", phi_boost ", round(phi_boost,4)))
     }
+    
   }
   
   ## 7. Set the "final model" to be the one with lower deviance
@@ -918,8 +920,10 @@ NGeDSboost <- function(formula, data, weights = NULL, normalize_data = FALSE,
     
     } else {
       pred_quadratic <-  pred_cubic <- NULL
-      final_model$base_learners[[bl_name]]$quadratic.int.knots <- NULL
-      final_model$base_learners[[bl_name]]$cubic.int.knots <- NULL
+      for (bl_name in names(base_learners)){
+        final_model$base_learners[[bl_name]]$quadratic.int.knots <- NULL
+        final_model$base_learners[[bl_name]]$cubic.int.knots <- NULL
+      }
     }
   
   # Simplify final_model structure
