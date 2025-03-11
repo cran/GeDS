@@ -8,7 +8,7 @@
 #' @description
 #' \code{NGeDSboost} implements component-wise gradient boosting (Bühlmann and Yu
 #' (2003), Bühlmann and Hothorn (2007)) using normal GeD splines (i.e., fitted
-#' with \code{\link{NGeDS}} function) as base-learners (see Dimitrova et al. (2024)).
+#' with \code{\link{NGeDS}} function) as base-learners (see Dimitrova et al. (2025)).
 #' @param formula a description of the structure of the model to be fitted,
 #' including the dependent and independent variables. Unlike \code{\link{NGeDS}}
 #' and \code{\link{GGeDS}}, the formula specified allows for multiple additive
@@ -45,9 +45,9 @@
 #' of boosting iterations to be run. If not specified, it defaults to 100L.
 #' This setting serves as a fallback when the stopping rule, based on
 #' consecutive deviances and tuned by \code{phi_boost_exit} and \code{q_boost},
-#' does not trigger an earlier termination (see Dimitrova et al. (2024)).
+#' does not trigger an earlier termination (see Dimitrova et al. (2025)).
 #' Therefore, users can increase/decrease the number of boosting iterations,
-#' by increasing/decreasing the value \code{phi_boost_exit} and/or#
+#' by increasing/decreasing the value \code{phi_boost_exit} and/or
 #' \code{q_boost}, or directly specify \code{max_iterations}.
 #' @param shrinkage numeric parameter in the interval \eqn{[0,1]} defining the
 #' step size or shrinkage parameter. This controls the size of the steps taken
@@ -247,7 +247,7 @@
 #' \emph{Applied Mathematics and Computation}, \strong{436}. \cr
 #' DOI: \doi{10.1016/j.amc.2022.127493}
 #' 
-#' Dimitrova, D. S., Kaishev, V. K. and Saenz Guillen, E. (2024).
+#' Dimitrova, D. S., Kaishev, V. K. and Saenz Guillen, E. L. (2025).
 #' \pkg{GeDS}: An \proglang{R} Package for Regression, Generalized Additive
 #' Models and Functional Gradient Boosting, based on Geometrically Designed
 #' (GeD) Splines. \emph{Manuscript submitted for publication.}

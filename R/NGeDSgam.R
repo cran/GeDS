@@ -37,7 +37,7 @@
 #' of boosting iterations to be run. If not specified, it defaults to 100L.
 #' This setting serves as a fallback when the stopping rule, based on
 #' consecutive deviances and tuned by \code{phi_gam_exit} and \code{q_gam},
-#' does not trigger an earlier termination (see Dimitrova et al. (2024)).
+#' does not trigger an earlier termination (see Dimitrova et al. (2025)).
 #' Therefore, users can increase/decrease the number of boosting iterations,
 #' by increasing/decreasing the value \code{phi_gam_exit} and/or \code{q_gam},
 #' or directly specify \code{max_iterations}.
@@ -158,10 +158,10 @@
 #' \emph{Applied Mathematics and Computation}, \strong{436}. \cr
 #' DOI: \doi{10.1016/j.amc.2022.127493}
 #' 
-#' Dimitrova, D. S., Guillen, E. S. and Kaishev, V. K.  (2024).
+#' Dimitrova, D. S., Kaishev, V. K. and Saenz Guillen, E. L. (2025).
 #' \pkg{GeDS}: An \proglang{R} Package for Regression, Generalized Additive
 #' Models and Functional Gradient Boosting, based on Geometrically Designed
-#' (GeD) Splines. \emph{Manuscript submitted for publication.} 
+#' (GeD) Splines. \emph{Manuscript submitted for publication.}
 
 ################################################################################
 ################################################################################

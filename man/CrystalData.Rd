@@ -41,13 +41,13 @@ into the structure of the material.
 data('CrystalData10k')
 
 # Fit a GeDS/GeDSboost model and compare how well the intensity peaks are captured
-Gmod <- NGeDS(FQ ~ f(Q), data = CrystalData10k, phi = 0.999, q = 3)
-Gmodboost <- NGeDSboost(FQ ~ f(Q), data = CrystalData10k, phi = 0.999, q = 3)
+Gmod <- NGeDS(F_Q ~ f(Q), data = CrystalData10k, phi = 0.999, q = 3)
+# for CrystalData300k set int.knots_init = 1, phi = 0.999, q = 4, instead
+Gmodboost <- NGeDSboost(F_Q ~ f(Q), data = CrystalData10k, phi = 0.9975, q = 4) 
 
 par(mfrow = c(1,2))
 plot(Gmod, n = 2)
-plot(Gmodboost, n = 2)
-
+plot(Gmodboost, n = 2) 
 }
 
 }
