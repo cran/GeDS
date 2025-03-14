@@ -1,7 +1,7 @@
 Package: GeDS
 Type: Package
 Title: Geometrically Designed Spline Regression
-Version: 0.2.7
+Version: 0.2.8
 Date: 2025-03-10
 Authors@R: c(person(given = c("Dimitrina", "S."),
                       family = "Dimitrova",
@@ -49,11 +49,11 @@ Encoding: UTF-8
 Imports: doFuture, doParallel, doRNG, foreach, future, MASS, mboost,
         parallel, plot3D, TH.data
 NeedsCompilation: yes
-Packaged: 2025-03-11 08:21:55 UTC; emili
+Packaged: 2025-03-13 16:31:12 UTC; emili
 Author: Dimitrina S. Dimitrova [aut],
   Vladimir K. Kaishev [aut],
   Andrea Lattuada [aut],
   Emilio L. Sáenz Guillén [aut, cre],
   Richard J. Verrall [aut]
 Repository: CRAN
-Date/Publication: 2025-03-11 14:30:06 UTC
+Date/Publication: 2025-03-14 10:10:02 UTC
