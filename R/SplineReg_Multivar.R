@@ -11,9 +11,16 @@ SplineReg_Multivar <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)), base_le
   if (inherits(family, "boost_family_glm") || inherits(family, "boost_family")) {
     family_name <- get_mboost_family(family@name)$family
     if (!is.null(link)) family <- get(family_name)(link = link)
+    
+    # Since for NGeDSboost(family = "binomial") the encoding is -1/1
+    # and for stats::binomial() the encoding is 0/1
+    if (family_name == "binomial") {
+      Y <- (Y + 1) / 2
+      }
+    
     } else {
       family_name <- family$family
-      }
+    }
   
   # Check if family is "gaussian"
   if (family_name == "gaussian") {
@@ -162,7 +169,8 @@ SplineReg_LM_Multivar <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)), base
   # Univariate 
   if (length(InterKnotsList_univ) != 0) {
     for (learner_name in names(InterKnotsList_univ)) {
-      if (!is.null(InterKnotsList_univ[[learner_name]]) && length(InterKnotsList_univ[[learner_name]]) >= n - 1) {
+      if (!is.null(InterKnotsList_univ[[learner_name]]) &&
+          length(InterKnotsList_univ[[learner_name]]) >= n - 1) {
         polyknots_list[[learner_name]] <-
           makenewknots(
             sort(c(InterKnotsList_univ[[learner_name]],
@@ -181,12 +189,14 @@ SplineReg_LM_Multivar <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)), base
       learner_knots <- list()
       for (i in seq_along(learner_vars)) {
         var_name <- learner_vars[i]
-        if (i == 1 && !is.null(InterKnotsList_biv[[learner_name]]$ikX) && length(InterKnotsList_biv[[learner_name]]$ikX) >= n - 1) {
+        if (i == 1 && !is.null(InterKnotsList_biv[[learner_name]]$ikX) &&
+            length(InterKnotsList_biv[[learner_name]]$ikX) >= n - 1) {
           learner_knots[[var_name]] <- makenewknots(
             sort(c(InterKnotsList_biv[[learner_name]]$ikX,
                    rep(extrList[[var_name]], n)))[-c(1, NCOL(matrices_biv_list_aux[[learner_name]][[var_name]]) + 1)],
             degree = n)
-        } else if (i == 2 && !is.null(InterKnotsList_biv[[learner_name]]$ikY) && length(InterKnotsList_biv[[learner_name]]$ikY) >= n - 1) {
+        } else if (i == 2 && !is.null(InterKnotsList_biv[[learner_name]]$ikY) &&
+                   length(InterKnotsList_biv[[learner_name]]$ikY) >= n - 1) {
           learner_knots[[var_name]] <- makenewknots(
             sort(c(InterKnotsList_biv[[learner_name]]$ikY,
                    rep(extrList[[var_name]], n)))[-c(1, NCOL(matrices_biv_list_aux[[learner_name]][[var_name]]) + 1)],
@@ -361,12 +371,6 @@ SplineReg_GLM_Multivar <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)), bas
   # 1) If coefficients are NOT provided estimate the corresponding regression model
   if (is.null(coefficients)) {
     
-    # Since for NGeDSboost(family = "binomial") the encoding is -1/1
-    # and for stats::binomial() the encoding is 0/1
-    if (family_name == "Negative Binomial Likelihood (logit link)") {
-      Y <- (Y + 1) / 2
-    }
-    
     # Initialization
     if (missing(mustart)||is.null(mustart)) {
       env <- parent.frame()
@@ -412,7 +416,8 @@ SplineReg_GLM_Multivar <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)), bas
   # Univariate 
   if (length(InterKnotsList_univ) != 0) {
     for (learner_name in names(InterKnotsList_univ)) {
-      if (!is.null(InterKnotsList_univ[[learner_name]])){
+      if (!is.null(InterKnotsList_univ[[learner_name]]) &&
+          length(InterKnotsList_univ[[learner_name]]) >= n - 1) {
         polyknots_list[[learner_name]] <- list(
           learner_name = makenewknots(
             sort(c(InterKnotsList_univ[[learner_name]],
@@ -432,12 +437,14 @@ SplineReg_GLM_Multivar <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)), bas
       learner_knots <- list()
       for (i in seq_along(learner_vars)) {
         var_name <- learner_vars[i]
-        if (i == 1 && !is.null(InterKnotsList_biv[[learner_name]]$ikX)) {
+        if (i == 1 && !is.null(InterKnotsList_biv[[learner_name]]$ikX) &&
+            length(InterKnotsList_biv[[learner_name]]$ikX) >= n - 1) {
           learner_knots[[var_name]] <- makenewknots(
             sort(c(InterKnotsList_biv[[learner_name]]$ikX,
                    rep(extrList[[var_name]], n)))[-c(1, NCOL(matrices_biv_list_aux[[learner_name]][[var_name]]) + 1)],
             degree = n)
-        } else if (i == 2 && !is.null(InterKnotsList_biv[[learner_name]]$ikY)) {
+        } else if (i == 2 && !is.null(InterKnotsList_biv[[learner_name]]$ikY) &&
+                   length(InterKnotsList_biv[[learner_name]]$ikY) >= n - 1) {
           learner_knots[[var_name]] <- makenewknots(
             sort(c(InterKnotsList_biv[[learner_name]]$ikY,
                    rep(extrList[[var_name]], n)))[-c(1, NCOL(matrices_biv_list_aux[[learner_name]][[var_name]]) + 1)],

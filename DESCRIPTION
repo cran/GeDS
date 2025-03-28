@@ -1,29 +1,29 @@
 Package: GeDS
 Type: Package
 Title: Geometrically Designed Spline Regression
-Version: 0.2.8
-Date: 2025-03-10
+Version: 0.2.9
+Date: 2025-03-16
 Authors@R: c(person(given = c("Dimitrina", "S."),
                       family = "Dimitrova",
                       role = "aut",
-                      email = "D.Dimitrova@city.ac.uk"),
+                      email = "D.Dimitrova@citystgeorges.ac.uk"),
               person(given = c("Vladimir", "K."),
                       family = "Kaishev",
                       role = "aut",
-                      email = "V.Kaishev@city.ac.uk"),
+                      email = "Vladimir.Kaishev.1@citystgeorges.ac.uk"),
               person(given = "Andrea",
                       family = "Lattuada",
                       role = "aut",
-                      email = "andrea.lattuada@hotmail.com"),
+                      email = "Andrea.Lattuada@hotmail.com"),
               person(given = c("Emilio", "L."),
                       family = "Sáenz Guillén",
                       role = c("aut", "cre"),
-                      email = "Emilio.Saenz-Guillen@bayes.city.ac.uk"),
+                      email = "Emilio.Saenz-Guillen@citystgeorges.ac.uk"),
               person(given = c("Richard", "J."),
                       family = "Verrall",
                       role = "aut",
-                      email = "R.J.Verrall@city.ac.uk"))
-Maintainer: Emilio L. Sáenz Guillén <Emilio.Saenz-Guillen@bayes.city.ac.uk>
+                      email = "R.J.Verrall@citystgeorges.ac.uk"))
+Maintainer: Emilio L. Sáenz Guillén <Emilio.Saenz-Guillen@citystgeorges.ac.uk>
 Description: Spline Regression, Generalized Additive Models, and Component-wise Gradient
   Boosting, utilizing Geometrically Designed (GeD) Splines. GeDS regression is a
   non-parametric method inspired by geometric principles, for fitting spline regression
@@ -49,11 +49,11 @@ Encoding: UTF-8
 Imports: doFuture, doParallel, doRNG, foreach, future, MASS, mboost,
         parallel, plot3D, TH.data
 NeedsCompilation: yes
-Packaged: 2025-03-13 16:31:12 UTC; emili
+Packaged: 2025-03-27 18:12:18 UTC; emili
 Author: Dimitrina S. Dimitrova [aut],
   Vladimir K. Kaishev [aut],
   Andrea Lattuada [aut],
   Emilio L. Sáenz Guillén [aut, cre],
   Richard J. Verrall [aut]
 Repository: CRAN
-Date/Publication: 2025-03-14 10:10:02 UTC
+Date/Publication: 2025-03-28 11:40:26 UTC

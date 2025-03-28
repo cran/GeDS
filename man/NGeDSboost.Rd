@@ -50,8 +50,9 @@ coefficients estimated. Default is equal to \code{FALSE}.}
 \item{family}{determines the loss function to be optimized by the boosting
 algorithm. In case \code{initial_learner = FALSE} it also determines the
 corresponding empirical risk minimizer to be used as offset initial learner.
-By default, it is set to \code{mboost::Gaussian()}. Users can specify any
-\code{\link[mboost]{Family}} object from the \pkg{mboost} package.}
+By default, it is set to \code{mboost::Gaussian()}. Users can specify any of the
+\code{\link[mboost]{Family}} object from the \pkg{mboost} package listed in
+\code{\link{GeDSboost-class}}.}
 
 \item{link}{in case the \code{\link[mboost]{Family}} object has not
 the desired link function you can specify it here.}
@@ -230,6 +231,9 @@ coef(Gmodboost, n = 4L)
 deviance(Gmodboost, n = 2L)
 deviance(Gmodboost, n = 3L)
 deviance(Gmodboost, n = 4L)
+
+# Plot
+plot(Gmodboost, n = 3L)
 
 ############################ Example 2 - Bodyfat ############################
 library(TH.data)
