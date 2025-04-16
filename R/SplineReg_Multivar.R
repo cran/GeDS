@@ -145,7 +145,17 @@ SplineReg_LM_Multivar <- function(X, Y, Z = NULL, offset = rep(0, NROW(Y)), base
     # the ‘-1’ serving to suppress the redundant extra intercept that would be added by default
     # 'splineDesign' already includes a basis that accounts for the intercept
     theta <- coef(tmp)
-    names(theta) <- sub("basisMatrix2", "", names(theta))
+    # Check if any coefficient is NA, which indicates a rank deficiency.
+    if (any(is.na(theta))) {
+      # # Compute the minimal-norm solution for theta using the Moore-Penrose generalized inverse.
+      # theta <- as.numeric(ginv(basisMatrix2) %*% Y0)
+      # # Now theta contains the computed coefficients that reproduce lm()'s fitted values.
+      
+      matcb <- t(basisMatrix2) %*% basisMatrix2
+      matcbinv <- ginv(matcb)
+      theta <- as.numeric(matcbinv %*% t(basisMatrix2) %*% tmp$fitted.values)
+    }
+    names(theta) <- sub("basisMatrix2", "", names(coef(tmp)))
     predicted <- tmp$fitted.values + offset
     
     # Reset environment of lm object

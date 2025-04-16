@@ -34,7 +34,7 @@
 #' @param min_iterations optional parameter to manually set a minimum number of
 #' boosting iterations to be run. If not specified, it defaults to 0L.
 #' @param max_iterations optional parameter to manually set the maximum number
-#' of boosting iterations to be run. If not specified, it defaults to 100L.
+#' of boosting iterations to be run. If not specified, it defaults to \code{100L}.
 #' This setting serves as a fallback when the stopping rule, based on
 #' consecutive deviances and tuned by \code{phi_gam_exit} and \code{q_gam},
 #' does not trigger an earlier termination (see Dimitrova et al. (2025)).
@@ -239,7 +239,7 @@ NGeDSgam <- function(formula, family = "gaussian", data, weights = NULL, offset 
   }
   
   # Ensure the response variable is a factor when using a binomial family
-  if (family$family == "binomial" && !is.factor(data[[response]])) {
+  if (family$family == "binomial") {
     data[[response]] <- as.factor(data[[response]])
     if (nlevels(data[[response]]) != 2) 
       stop("response is not a factor at two levels but ", sQuote("family = binomial"))
@@ -455,25 +455,7 @@ NGeDSgam <- function(formula, family = "gaussian", data, weights = NULL, offset 
   bivariate_GeDS_theta <- unlist(setNames(bivariate_GeDS_theta, names(bivariate_GeDS_learners)))
     
   # Handle linear and factor bl/variables
-  linear_coef <- NULL
-  if (length(linear_variables) > 0) {
-    # Initialize the intercept and slopes
-    intercept <- 0; slopes <- NULL
-    # Loop through each variable in linear_variables
-    for (var in linear_variables) {
-      coef <- final_model$base_learners[[var]]$coefficients
-      int <- coef$b0
-      slp <- unlist(coef[names(coef) != "b0"]); names(slp) <- paste0(var, names(slp))
-      # Sum up the intercepts
-      intercept <- intercept + int 
-      # Vector of slopes
-      slopes <- c(slopes, slp)
-    }
-    names(intercept) <- "b0"
-    linear_coef <- c(intercept, slopes)
-  } else {
-    Z <- NULL  # Set Z to NULL if there are no factor variables
-  }
+  linear_coef <- lin.coef(final_model, linear_variables)
   
   theta <- c(univariate_GeDS_theta, bivariate_GeDS_theta, linear_coef)
   
