@@ -1,7 +1,7 @@
 Package: GeDS
 Type: Package
 Title: Geometrically Designed Spline Regression
-Version: 0.3.0
+Version: 0.3.1
 Date: 2025-04-11
 Authors@R: c(person(given = c("Dimitrina", "S."),
                       family = "Dimitrova",
@@ -44,7 +44,7 @@ LazyData: TRUE
 Depends: R (>= 3.0.1), Rcpp (>= 1.0.0), splines, stats, utils, Matrix,
         methods, mi, Rmpfr
 LinkingTo: Rcpp
-Suggests: testthat (>= 3.0.0), R.rsp
+Suggests: R.rsp, testthat (>= 3.0.0)
 RoxygenNote: 7.3.2
 Encoding: UTF-8
 Imports: doFuture, doParallel, doRNG, foreach, future, MASS, mboost,
@@ -52,11 +52,11 @@ Imports: doFuture, doParallel, doRNG, foreach, future, MASS, mboost,
 Config/testthat/edition: 3
 VignetteBuilder: R.rsp
 NeedsCompilation: yes
-Packaged: 2025-04-16 10:11:32 UTC; emili
+Packaged: 2025-04-21 14:26:56 UTC; emili
 Author: Dimitrina S. Dimitrova [aut],
   Vladimir K. Kaishev [aut],
   Andrea Lattuada [aut],
   Emilio L. Sáenz Guillén [aut, cre],
   Richard J. Verrall [aut]
 Repository: CRAN
-Date/Publication: 2025-04-16 10:40:02 UTC
+Date/Publication: 2025-04-22 07:30:06 UTC

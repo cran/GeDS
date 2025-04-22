@@ -1,4 +1,4 @@
-b132e642b27b599f77c0cbebfbcc2fcb *DESCRIPTION
+bf30dd350ed9f66d8be402df0d048ba6 *DESCRIPTION
 9a247dccb454ec5e041d115f2f74b5ed *NAMESPACE
 674bb1edc46dec789446a0f0dedc39c6 *R/BivariateFitter.R
 b4c535e8c420ebd48e88ed83e8ac71ed *R/GGeDS.R
@@ -7,7 +7,7 @@ de1524bace1a30bdf57d410c605ebf35 *R/GeDSClass.R
 117dad0660aa6c16497ee59b4a03e88f *R/IRLSfit.R
 36799c8770e1039236479dd614fa83b5 *R/IntegrateDerive.R
 cea1cea853080e4fe2d6685e77dac1ae *R/NGeDS.R
-e4b2f88b2be5c9b9ef318bf51b856e3f *R/NGeDSboost.R
+f18255691ad17bbd4b2c37afbad67deb *R/NGeDSboost.R
 b3d69b176af32b8cd1356ec2ba820ac8 *R/NGeDSgam.R
 563320a69da10503dc3dedc7ba32b8f0 *R/RcppExports.R
 7d108885c65e87e7274614fe2bd00952 *R/S3methods.R
@@ -28,15 +28,15 @@ e9a66f6215fe4d9b0af8dc9e02793884 *R/helpers.R
 5122da7c35675e789b560d54b203a1ee *R/tensorProd_R.R
 d0241a00a2f6dba28f338e90285788d9 *R/unexported.R
 e82da25c3b0c896f90477fd7ddc1153a *README.md
-1dda19015f0aa969acee990c150e3ac9 *build/partial.rdb
-070f5c0f48f81516969bf47460147bb0 *build/vignette.rds
+cb3b20077bebc5da31fc1b46c657c0ff *build/partial.rdb
+a1ccd273544d61a46b9b99524ba8afb8 *build/vignette.rds
 4ea39f4cbb433c672e14574ab460548c *data/BaFe2As2.rda
 4802fa6ac8089d8ed03edcffad90d9ee *data/CrystalData10k.rda
 5a3c09d7b65866e9edd1c70d73185769 *data/CrystalData300k.rda
 f53ed93a8758b8a9bbf34b4e9b19d097 *data/EWmortality.rda
 0f9b34aa63701c8ceacd160306e83ec0 *data/coalMining.rda
 585edc81d86fc21e9f510c6b834a6baf *inst/CITATION
-c185a491f7bd4652f78bd5daab7dc3f0 *inst/doc/jss_article.pdf
+a2c22aa4bd09a5bf61c96e06470f46e1 *inst/doc/jss_article.pdf
 716bf300da4cf7412875d80ac3f072eb *inst/doc/jss_article.pdf.asis
 8d23ded897bd2a3815099814b3d26339 *man/BaFe2As2.Rd
 0601f4e6cc545d29d994f1b5c927d4be *man/BivariateFitters.Rd
@@ -76,5 +76,5 @@ b2378cf6984df8d1b1ae87a81fe28228 *man/plot-GeDSgam-method.Rd
 77319264f15b8de5b0d7d3f211e77edb *src/GeDS1.cpp
 71d8743b8f721724a5d0d2776034e574 *src/RcppExports.cpp
 b26bbfa3621c0c37768efcf51323e3d6 *tests/testthat.R
-f559be2e0da32e36659a956736618b40 *tests/testthat/test-predictions.R
+535ee9a48ecc1cda4b1dbf69e84a2ab7 *tests/testthat/test-predictions.R
 716bf300da4cf7412875d80ac3f072eb *vignettes/jss_article.pdf.asis
