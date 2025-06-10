@@ -230,8 +230,7 @@ setMethod("plot", signature(x = "GeDS"), function(x, f = NULL, which, DEV = FALS
     
     # Set y-axis limits
     yylim <- range(c(Y, x$Linear.Fit$Predicted)) + 0.05 * c(-1, 1) *  range(c(Y, x$Linear.Fit$Predicted))
-    ylim <- if (!is.null(others$ylim)) others$ylim else yylim
-    
+
     # Determine the maximum number of iterations
     maxim <- nrow(x$Stored)
     
@@ -298,7 +297,11 @@ setMethod("plot", signature(x = "GeDS"), function(x, f = NULL, which, DEV = FALS
         main
       }
       # Plot
-      plot(X, Y, main = main0, ...)
+      if (!is.null(others$ylim)) {
+        plot(X, Y, main = main0, ...)  
+      } else {
+        plot(X, Y, main = main0, ylim = yylim, ...)
+      }
       if (!is.null(f)) lines(X, f(X), col = "black", lwd = 2)
       
       # Obtain stage A knots and perform spline regression
@@ -354,9 +357,12 @@ setMethod("plot", signature(x = "GeDS"), function(x, f = NULL, which, DEV = FALS
           ", b = ",
           knot_values[length(knot_values)]
         )
-        if (length(knt_text) > 18) {
-          knt_text1 <- paste(knt_text[1:round(length(knt_text) / 2)], collapse = ", ")
-          knt_text2 <- paste(knt_text[(round(length(knt_text) / 2) + 1):length(knt_text)], collapse = ", ")
+        if (nchar(knt_text) > 50) {
+          
+          knt_text_split <- strsplit(knt_text, ",\\s*")[[1]]
+          mid <- ceiling(length(knt_text_split) / 2)
+          knt_text1 <- paste0(paste(knt_text_split[1:mid], collapse = ", "), ",")
+          knt_text2 <- paste(knt_text_split[(mid + 1):length(knt_text_split)], collapse = ", ")
           
           knots_text1 <- bquote(italic(bold(t)[1 * ";" * k[1] * "," * 2]) == italic(.(paste0("{", knt_text1))))
           knots_text2 <- bquote(italic(.(paste0(knt_text2, "}"))))
@@ -782,7 +788,11 @@ setMethod("plot", signature(x = "GeDSboost"), function(x, n = 3L,...)
       paste0(length(int.knots), " internal knots")
     }
     
-    plot(X_mat, Y, main = main0, ylim = y_range, ...)
+    if (!is.null(additional_params$ylim)) {
+      plot(X_mat, Y, main = main0, ...)  
+    } else {
+      plot(X_mat, Y, main = main0, ylim = y_range, ...)
+    }
     
     pred <- data.frame(X_mat, fit)
     pred <- pred[order(pred$X_mat),]

@@ -53,7 +53,7 @@ SplineReg_biv <- function(X ,Y , Z, W = NULL, offset = rep(0,length(X)), weights
   
   
   out <- list("Theta"= theta,"Predicted"= predicted,
-              "Residuals"= resid,"RSS" = t(resid)%*%resid,
+              "Residuals"= resid,"RSS" = as.numeric(crossprod(resid)),
               "XBasis"= basisMatrixX, "YBasis" = basisMatrixY,
               "Xknots" = sort(c(InterKnotsX,rep(Xextr,n))),
               "Yknots" = sort(c(InterKnotsY,rep(Yextr,n))),
@@ -109,18 +109,24 @@ SplineReg_biv_GLM <- function(X, Y, Z, W = NULL, offset = rep(0,nobs), weights =
           # Validate length of 'inits'
           if(length(inits)!= NCOL(basisMatrixbiv2)) stop("'inits' has wrong length")
           # Calculate initial mustart based on 'inits' (initial value for spline coefficients)
-          mustart <- family$linkinv(basisMatrixbiv2%*%inits)
+          mustart <- family$linkinv(basisMatrixbiv2 %*% inits)
         }
     }
     
-    tmp <- IRLSfit(basisMatrixbiv2, Z, offset = offset,
-                   family = family, mustart = mustart, weights = weights)
+    tmp <- tryCatch({
+      glm(Z ~ -1 + basisMatrixbiv2, family = family, weights = weights, mustart = mustart, offset = offset)
+    }, error = function(e) {
+      # If glm throws an error, fallback to IRLSfit
+      IRLSfit(basisMatrixbiv2, Z, offset = offset,
+              family = family, mustart = mustart, weights = weights)
+    })
+    
     # Extract fitted coefficients
     theta <- coef(tmp)
     # Avoid issues if there are NA values in the coefficients:
     if(any(is.na(theta))) theta[is.na(theta)] <- 0
     # Compute predicted values
-    predicted <- family$linkinv(basisMatrixbiv2%*%theta + offset)
+    predicted <- family$linkinv(basisMatrixbiv2 %*% theta + offset)
     
   # 2) If coefficients are provided and conformable with InterKnotsX/InterKnotsY, compute the corresponding predicted values
   } else {
@@ -133,7 +139,7 @@ SplineReg_biv_GLM <- function(X, Y, Z, W = NULL, offset = rep(0,nobs), weights =
   resid <- Z - predicted
   
   out <- list("Theta" = theta, "Predicted" = predicted,
-              "Residuals" = resid,"RSS" = tmp$lastdeviance, "deviance" = tmp$deviance,
+              "Residuals" = resid, "RSS" = tmp$deviance,
               "XBasis" = basisMatrixX, "YBasis" = basisMatrixY,
               "Xknots" = sort(c(InterKnotsX,rep(Xextr,ord))),
               "Yknots" = sort(c(InterKnotsY,rep(Yextr,ord))),

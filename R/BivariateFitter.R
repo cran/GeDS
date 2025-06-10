@@ -567,7 +567,7 @@ GenBivariateFitter <- function(X, Y, Z, W, family = family, weights = rep(1,leng
     
     # Store residuals and deviance 
     res.tmp <- first.deg$Residuals
-    RSS.tmp <- first.deg$temporary$lastdev
+    RSS.tmp <- first.deg$RSS
     RSSnew <- c(RSSnew, RSS.tmp)
     # Working weights (weights in the final iteration of the IRLS fit)
     working.weights <- first.deg$temporary$weights  
@@ -900,7 +900,7 @@ placeKnot <- function(Dim, Dim.intknots, matr, Indicator, FixedDim, ordFixedDim,
   Dim.weights <- beta*Dim.mean + (1 - beta)*Dim.width
   
   # (Step 7 - UnivariateFitter) Compute the new Dim knot as a weighted average of Dim values
-  # x <- findNewDimKnot_R(dcumFixedDim.Dim, Dim.weights, sort(c(Dim.intknots, range(matr[,Dim]))), matrFixedDim, Dim.index)
+  x <- findNewDimKnot_R(dcumFixedDim.Dim, Dim.weights, sort(c(Dim.intknots, range(matr[,Dim]))), matrFixedDim, Dim.index)
   if (is.null(Dim.intknots)) Dim.intknots <- NA_real_
   xx <- findNewDimKnot(dcumFixedDim.Dim, Dim.weights, sort(c(Dim.intknots, range(matr[,Dim]))), matrFixedDim, Dim.index)
   
