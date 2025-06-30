@@ -4,7 +4,7 @@
 \alias{BivariateFitters}
 \alias{BivariateFitter}
 \alias{GenBivariateFitter}
-\title{Fitter function for GeD Spline Regression for bivariate data}
+\title{Fitter Function for GeD Spline Regression for Bivariate Data}
 \usage{
 BivariateFitter(
   X,
@@ -12,12 +12,12 @@ BivariateFitter(
   Z,
   W,
   weights = rep(1, length(X)),
-  Indicator,
+  indicator,
   beta = 0.5,
   phi = 0.99,
-  min.intknots = 0,
-  max.intknots = 300,
-  q = 2,
+  min.intknots = 0L,
+  max.intknots = 300L,
+  q = 2L,
   Xextr = range(X),
   Yextr = range(Y),
   show.iters = TRUE,
@@ -35,12 +35,12 @@ GenBivariateFitter(
   W,
   family = family,
   weights = rep(1, length(X)),
-  Indicator,
+  indicator,
   beta = 0.5,
   phi = 0.5,
-  min.intknots = 0,
-  max.intknots = 300,
-  q = 2,
+  min.intknots = 0L,
+  max.intknots = 300L,
+  q = 2L,
   Xextr = range(X),
   Yextr = range(Y),
   show.iters = TRUE,
@@ -50,91 +50,92 @@ GenBivariateFitter(
 )
 }
 \arguments{
-\item{X}{a numeric vector containing \eqn{N} sample values of the first
+\item{X}{A numeric vector containing \eqn{N} sample values of the first
 independent variable chosen to enter the spline regression component of the
 predictor model.}
 
-\item{Y}{a numeric vector containing \eqn{N} sample values of the second
+\item{Y}{A numeric vector containing \eqn{N} sample values of the second
 independent variable chosen to enter the spline regression component of the
 predictor model.}
 
-\item{Z}{a vector of size \eqn{N} containing the observed values of the
+\item{Z}{A vector of size \eqn{N} containing the observed values of the
 response variable.}
 
-\item{W}{a design matrix with \eqn{N} rows containing other covariates
+\item{W}{A design matrix with \eqn{N} rows containing other covariates
 selected to enter the parametric component of the predictor model (see
 \code{\link[=formula.GeDS]{formula}}). If no such covariates are selected, it
 is set to \code{NULL} by default.}
 
-\item{weights}{an optional vector of size \eqn{N} of `prior weights' to be
+\item{weights}{An optional vector of size \eqn{N} of `prior weights' to be
 put on the observations in the fitting process in case the user requires
 weighted GeDS fitting. It is \code{NULL} by default.}
 
-\item{Indicator}{contingency table (i.e., frequency of observations) for the
+\item{indicator}{A contingency table (i.e., frequency of observations) for the
 independent variables \code{X} and \code{Y}.}
 
-\item{beta}{numeric parameter in the interval \eqn{[0,1]} tuning the knot
+\item{beta}{Numeric parameter in the interval \eqn{[0,1]} tuning the knot
 placement in stage A of GeDS. See the description of \code{\link{NGeDS}} or
 \code{\link{GGeDS}}.}
 
-\item{phi}{numeric parameter in the interval \eqn{[0,1]} specifying the
+\item{phi}{Numeric parameter in the interval \eqn{(0,1)} specifying the
 threshold for the stopping rule  (model selector) in stage A of GeDS. See
-also \code{stoptype} and details in the description of \code{\link{NGeDS}} or
+also \code{stoptype} and Details in the description of \code{\link{NGeDS}} or
 \code{\link{GGeDS}}.}
 
-\item{min.intknots}{optional parameter specifying the minimum number of
-internal knots required in Stage A's fit. Default is zero.}
+\item{min.intknots}{Optional parameter specifying the minimum number of
+internal knots required in Stage A's fit. Default is \code{0L}.}
 
-\item{max.intknots}{optional parameter allowing the user to set a maximum
+\item{max.intknots}{Optional parameter allowing the user to set a maximum
 number of internal knots to be added in Stage A by the GeDS estimation
-algorithm. Default equals the number of internal knots \eqn{\kappa} for the
-saturated GeDS model (i.e. \eqn{\kappa=N-2}).}
+algorithm. Default equals \code{300L}.}
 
-\item{q}{numeric parameter which allows to fine-tune the stopping rule of
-stage A of GeDS, by default equal to 2. See details in the description of
+\item{q}{Numeric parameter which allows to fine-tune the stopping rule of
+stage A of GeDS, by default equal to 2. See Details in the description of
 \code{\link{NGeDS}} or \code{\link{GGeDS}}.}
 
-\item{Xextr}{boundary knots in the \code{X} direction. By default equal to
+\item{Xextr}{Boundary knots in the \code{X} direction. By default equal to
 the range of \code{X}.}
 
-\item{Yextr}{boundary knots in the \code{Y} direction. By default equal to
+\item{Yextr}{Boundary knots in the \code{Y} direction. By default equal to
 the range of \code{Y}.}
 
-\item{show.iters}{logical variable indicating whether or not to print fitting
+\item{show.iters}{Logical variable indicating whether or not to print fitting
 information at each step. Default is \code{FALSE}.}
 
-\item{tol}{numeric value indicating the tolerance to be used in checking
+\item{tol}{Numeric value indicating the tolerance to be used in checking
 whether two knots should be considered different during the knot placement
 steps in stage A.}
 
-\item{stoptype}{a character string indicating the type of GeDS stopping rule
+\item{stoptype}{A character string indicating the type of GeDS stopping rule
 to be used. It should be either \code{"SR"}, \code{"RD"} or \code{"LR"},
 partial match allowed. See details of \code{\link{NGeDS}} or
 \code{\link{GGeDS}}.}
 
-\item{higher_order}{a logical defining whether to compute the higher
+\item{higher_order}{A logical defining whether to compute the higher
 order fits (quadratic and cubic) after stage A is run. Default is
 \code{TRUE}.}
 
-\item{Xintknots}{a vector of starting internal knots in the \code{X} direction. 
-Allows the user to begin Stage A's GeDS algorithm with a linear spline fit
-using a predefined vector of internal \code{X} knots, instead of starting with
-a straight line fit. Default is \code{NULL}.}
+\item{Xintknots}{A vector of starting internal knots in the \code{X} direction. 
+Allows the user to begin Stage A's GeDS algorithm with a linear (least-squares)
+spline fit using a predefined vector of internal \code{X} knots, instead of
+starting with a straight line fit (i.e., with zero internal knots). Note that
+this is not available for \code{GenBivariateFitter}. Default is \code{NULL}.}
 
-\item{Yintknots}{a vector of starting internal knots in the \code{Y} direction. 
-Allows the user to begin Stage A's GeDS algorithm with a linear spline fit
-using a predefined vector of internal \code{X} knots, instead of starting with
-a straight line fit. Default is \code{NULL}.}
+\item{Yintknots}{A vector of starting internal knots in the \code{Y} direction. 
+Allows the user to begin Stage A's GeDS algorithm with a linear (least-squares)
+spline fit using a predefined vector of internal \code{Y} knots, instead of
+starting with a straight line fit (i.e., with zero internal knots). Note that
+this is not available for \code{GenBivariateFitter}. Default is \code{NULL}.}
 
-\item{family}{a description of the error distribution and link function to be
+\item{family}{A description of the error distribution and link function to be
 used in the model. This can be a character string naming a family function
 (e.g. \code{"gaussian"}), the family function itself (e.g.
 \code{\link[stats]{gaussian}}) or the result of a call to a family function
 (e.g. \code{gaussian()}). See \link[stats]{family} for details on family
-functions.}
+functions. Note that this argument applies only to \code{GenBivariateFitter}.}
 }
 \value{
-A \code{\link{GeDS-Class}} object, but without the \code{Formula},
+A \code{"GeDS"} class object, but without the \code{formula},
 \code{extcall}, \code{terms} and \code{znames} slots.
 }
 \description{

@@ -1,3 +1,5 @@
+#' @importFrom splines splineDesign
+#' @importFrom stats lm coef
 SplineReg_biv <- function(X ,Y , Z, W = NULL, offset = rep(0,length(X)), weights = rep(1,length(X)),
                           InterKnotsX, InterKnotsY, n, Xextr = range(X), Yextr = range(Y), flag = TRUE,
                           center = c(sum(Xextr)/2,sum(Yextr)/2), coefficients = NULL)
@@ -52,16 +54,17 @@ SplineReg_biv <- function(X ,Y , Z, W = NULL, offset = rep(0,length(X)), weights
   
   
   
-  out <- list("Theta"= theta,"Predicted"= predicted,
-              "Residuals"= resid,"RSS" = as.numeric(crossprod(resid)),
-              "XBasis"= basisMatrixX, "YBasis" = basisMatrixY,
+  out <- list("theta"= theta,"predicted"= predicted,
+              "residuals"= resid,"rss" = as.numeric(crossprod(resid)),
+              "Xbasis"= basisMatrixX, "Ybasis" = basisMatrixY,
               "Xknots" = sort(c(InterKnotsX,rep(Xextr,n))),
               "Yknots" = sort(c(InterKnotsY,rep(Yextr,n))),
               "temporary"=tmp)
   return(out)
 }
 
-
+#' @importFrom splines splineDesign
+#' @importFrom stats glm coef
 SplineReg_biv_GLM <- function(X, Y, Z, W = NULL, offset = rep(0,nobs), weights = rep(1,length(X)),
                               InterKnotsX, InterKnotsY, n, Xextr = range(X), Yextr = range(Y),
                               flag = TRUE, center = c(sum(Xextr)/2,sum(Yextr)/2), 
@@ -138,9 +141,9 @@ SplineReg_biv_GLM <- function(X, Y, Z, W = NULL, offset = rep(0,nobs), weights =
   # Calculate residuals
   resid <- Z - predicted
   
-  out <- list("Theta" = theta, "Predicted" = predicted,
-              "Residuals" = resid, "RSS" = tmp$deviance,
-              "XBasis" = basisMatrixX, "YBasis" = basisMatrixY,
+  out <- list("theta" = theta, "predicted" = predicted,
+              "residuals" = resid, "rss" = tmp$deviance,
+              "Xbasis" = basisMatrixX, "Ybasis" = basisMatrixY,
               "Xknots" = sort(c(InterKnotsX,rep(Xextr,ord))),
               "Yknots" = sort(c(InterKnotsY,rep(Yextr,ord))),
               "temporary" = tmp )

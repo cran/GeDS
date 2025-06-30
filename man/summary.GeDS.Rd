@@ -4,26 +4,25 @@
 \alias{summary.GeDS}
 \alias{summary.GeDSboost}
 \alias{summary.GeDSgam}
-\title{Summary method for GeDS, GeDSboost, GeDSgam}
+\title{Summary Method for GeDS, GeDSgam, GeDSboost}
 \usage{
 \method{summary}{GeDS}(object, ...)
 
-\method{summary}{GeDSboost}(object, ...)
-
 \method{summary}{GeDSgam}(object, ...)
+
+\method{summary}{GeDSboost}(object, ...)
 }
 \arguments{
-\item{object}{the \code{\link{GeDS-class}}, \code{\link{GeDSboost-class}} or
-\code{\link{GeDSgam-class}} object for which the main information should be
-printed on screen.}
+\item{object}{The \code{"GeDS"}, \code{"GeDSgam"} or \code{"GeDSboost"} object
+for which the main information should be printed on screen.}
 
-\item{...}{potentially further arguments (required by the definition of the
+\item{...}{Potentially further arguments (required by the definition of the
 generic function).}
 }
 \description{
 Method for the generic function \code{\link[base]{summary}} that allows you to
-print on screen the main information related to a fitted \code{\link{GeDS-class}},
-\code{\link{GeDSboost-class}} or \code{\link{GeDSgam-class}} model.
+print on screen the main information related to a fitted \code{"GeDS"},
+\code{"GeDSgam"} or \code{"GeDSboost"} model.
 Similar to \code{\link{print.GeDS}} but with some extra detail.
 }
 \seealso{

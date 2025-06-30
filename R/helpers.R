@@ -1,5 +1,5 @@
 ################################################################################
-
+#' @importFrom stats .lm.fit
 lm.wfit.light <- function (x, y, w, tol = 1e-07) {
   x.asgn <- attr(x, "assign")
   zero.weights <- any(w == 0)
@@ -71,7 +71,8 @@ makeNewRes2 <- function(resold, recurr, weights){
 }
 
 ################################################################################
-
+#' @importFrom splines splineDesign
+#' @importFrom stats coef .lm.fit
 SplineReg_fast_weighted_zed <- function(X, Y, Z, offset,
                                         weights = rep(1, length(X)), InterKnots,
                                         n, extr = range(X))
@@ -85,15 +86,16 @@ SplineReg_fast_weighted_zed <- function(X, Y, Z, offset,
   theta <- coef(tmp)
   predicted <- basisMatrix2 %*% theta + offset
   resid <- Y - predicted
-  out <- list("Theta" = theta,"Predicted" = predicted,
-              "Residuals" = resid, "RSS" = as.numeric(crossprod(resid)),
-              "Basis" = basisMatrix2,
+  out <- list("theta" = theta, "predicted" = predicted,
+              "residuals" = resid, "rss" = as.numeric(crossprod(resid)),
+              "basis" = basisMatrix2,
               "temporary" = tmp)
   return(out)
 }
 
 ################################################################################
-
+#' @importFrom splines splineDesign
+#' @importFrom stats .lm.fit lm.fit lm.wfit residuals coef
 SplineReg_fast_biv <- function(X, Y, Z, W=NULL, weights = rep(1, length(X)),
                                InterKnotsX, InterKnotsY, n, Xextr = range(X),
                                Yextr = range(Y), flag=TRUE, 
@@ -129,15 +131,15 @@ SplineReg_fast_biv <- function(X, Y, Z, W=NULL, weights = rep(1, length(X)),
   }
   theta <- as.numeric(coef(tmp))
   #  theta[is.na(theta)] <- 0
-  out <- list("Theta" = theta, "Predicted" = basisMatrixbiv2 %*% theta,
-              "Residuals" = resid, "RSS" = as.numeric(crossprod(resid)),
-              "XBasis" = basisMatrixX, "YBasis" = basisMatrixY, #"Poly"=poly,
+  out <- list("theta" = theta, "predicted" = basisMatrixbiv2 %*% theta,
+              "residuals" = resid, "rss" = as.numeric(crossprod(resid)),
+              "Xbasis" = basisMatrixX, "Ybasis" = basisMatrixY, # "poly" = poly,
               "temporary" = tmp)
   return(out)
 }
 
 ################################################################################
-
+#' @importFrom splines splineDesign
 newknot.guess <- function(intknots, extr, guess, newknot) {
   # i. Determine the position of the new knot relative to existing internal knots
   newknot.position <- sum(intknots < as.numeric(newknot))
@@ -199,9 +201,10 @@ newknot.guess <- function(intknots, extr, guess, newknot) {
 # }
 
 ################################################################################
-
-
-CI <- function(tmp, resid, prob = 0.95, basisMatrix, basisMatrix2, predicted,
+#' @importFrom MASS ginv
+#' @importFrom Matrix rankMatrix
+#' @importFrom stats qt qnorm
+ci <- function(tmp, resid, prob = 0.95, basisMatrix, basisMatrix2, predicted,
                n_obs = NROW(basisMatrix),
                type = "lm",
                huang = TRUE) {
@@ -214,13 +217,13 @@ CI <- function(tmp, resid, prob = 0.95, basisMatrix, basisMatrix2, predicted,
     prob <- 1-.5*(1-prob)
     # Diagonal of the hat matrix
     H_diag <- stats::hat(basisMatrix2, intercept = FALSE) # or influence(tmp)$hat
-    # CI_j =\hat{y_j} ± t_{α/2,df}*\hat{σ}*\sqrt{H_{jj}}; H = X(X'X)^{−1}X'
+    # CI_j =\hat{y_j} ± t_{α/2,df}*\hat{σ}*\sqrt{H_{jj}}; H = X(X'X)^{-1}X'
     band <- qt(prob,df) * sigma_hat * H_diag^.5
     
-    NCI = list("Upp" = predicted + band, "Low" = predicted - band)
+    nci = list("Upp" = predicted + band, "Low" = predicted - band)
     
     # Huang (2003) method for confidence band width (see Theorem 6.1)
-    band_width_huang <- ACI <- NULL; dim_threshold = 1500
+    band_width_huang <- aci <- NULL; dim_threshold = 1500
     if (huang && n_obs < dim_threshold && NCOL(basisMatrix) != 0) {
       # i. E_n[B(X)B^t(X)] = (1/n)*\sum_{i=1}^nB(X_i)B^t(X_i)
       matcb <- crossprod(basisMatrix) / n_obs
@@ -232,7 +235,7 @@ CI <- function(tmp, resid, prob = 0.95, basisMatrix, basisMatrix2, predicted,
           solve(matcb)
         }, error = function(e2) {
           message("SplineReg_LM, Huang CI: Matrix singular, using ginv().")
-          MASS::ginv(matcb)
+          ginv(matcb)
         })
       })
       # ii. Var(\hat{f} | X) = (1/n)*B^t(x) * E_n[B(X)B^t(X)]^-1 * B(x) * \hat{σ}^2
@@ -241,7 +244,7 @@ CI <- function(tmp, resid, prob = 0.95, basisMatrix, basisMatrix2, predicted,
       # iii. ± z_{1-α/2} * Var(\hat{f} | X)
       band_width_huang <- qnorm(prob) * sqrt(conditionalVariance)
       
-      ACI = list("Upp" = predicted + band_width_huang,
+      aci = list("Upp" = predicted + band_width_huang,
                  "Low" = predicted - band_width_huang)
     }
     
@@ -262,7 +265,7 @@ CI <- function(tmp, resid, prob = 0.95, basisMatrix, basisMatrix2, predicted,
           eta <- predict(tmp, type = "link")
           
           matcb <- t(basisMatrix2) %*% diag(tmp$weights) %*% basisMatrix2
-          Sigma <- summary(tmp)$dispersion * MASS::ginv(matcb)
+          Sigma <- summary(tmp)$dispersion * ginv(matcb)
           se_eta   <- sqrt(rowSums((basisMatrix2 %*% Sigma) * basisMatrix2))
           
           list(fit = eta, se.fit = se_eta)
@@ -275,18 +278,18 @@ CI <- function(tmp, resid, prob = 0.95, basisMatrix, basisMatrix2, predicted,
       lower <- tmp$family$linkinv(lower_eta)
       upper <- tmp$family$linkinv(upper_eta)
       
-      NCI = list("Upp" = upper, "Low" = lower)
+      nci = list("Upp" = upper, "Low" = lower)
       
       } else {
         # tmp$coefficients == "When using bivariate base-learners, the 'single spline representation' (in pp form or B-spline form) of the boosted fit is not available."
-        NCI = NULL
+        nci = NULL
       }
     
-    ACI = NULL
+    aci = NULL
     
   }
   
-  return(list(NCI = NCI, ACI = ACI))
+  return(list(nci = nci, aci = aci))
   
 }
 

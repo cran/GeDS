@@ -3,34 +3,35 @@
 ################################### Integrate ##################################
 ################################################################################
 ################################################################################
-#' @title Defined integral of GeDS objects
+#' @title Defined Integral of GeDS Objects
 #' @name Integrate 
 #' @description
 #' This function computes defined integrals of a fitted GeDS regression model.
-#' @param object the \code{\link{GeDS-class}} object containing the  GeDS fit
+#' 
+#' @param object An object of class \code{"GeDS"} containing the  GeDS fit
 #' which should be integrated. It should be the result of fitting a univariate
 #' GeDS regression via \code{\link{NGeDS}} or \code{\link{GGeDS}}. If this is
 #' provided, the \code{knots} and \code{coef} parameters will be automatically
 #' extracted from the \code{GeDS} object. If \code{object} is \code{NULL}, the
 #' user must provide the \code{knots} and \code{coef} vectors explicitly.
-#' @param knots a numeric vector of knots. This is required if \code{object} is 
+#' @param knots A numeric vector of knots. This is required if \code{object} is 
 #'   \code{NULL}. If a \code{GeDS} object is provided, this parameter is ignored.
-#' @param coef a numeric vector of coefficients. This is required if \code{object} is 
+#' @param coef A numeric vector of coefficients. This is required if \code{object} is 
 #'   \code{NULL}. If a \code{GeDS} object is provided, this parameter is ignored
-#' @param from optional numeric vector containing the lower limit(s) of
+#' @param from Optional numeric vector containing the lower limit(s) of
 #' integration. It should be either of size one or of the same size as the
 #' argument \code{to}. If left unspecified, by default it is set to the left-most
 #' limit of the interval embedding the observations of the independent variable.
-#' @param to numeric vector containing the upper limit(s) of integration.
-#' @param n integer value (2, 3 or 4) specifying the order (\eqn{=} degree
+#' @param to Numeric vector containing the upper limit(s) of integration.
+#' @param n Integer value (2, 3 or 4) specifying the order (\eqn{=} degree
 #' \eqn{ + 1}) of the GeDS fit to be integrated. By default equal to \code{3L}.
 #' Non-integer values will be passed to the function \code{\link{as.integer}}.
 #'
 #' @details
-#' The function is based on the well known property (c.f. De Boor, 2001, Chapter
+#' The function relies on the well known property (c.f. De Boor, 2001, Chapter
 #' X, formula (33)) that the integral of a linear combination of appropriately
-#' normalized B-splines is equal to the sum of its corresponding coefficients,
-#' noting that the GeDS regression is in fact such a linear combination.
+#' normalized B-splines (i.e., the standard representation of a
+#' GeDS regression model) is equal to the sum of its corresponding coefficients.
 #'
 #' Since the function is based on this property, it is designed to work only on
 #' the predictor scale in the GNM (GLM) framework.
@@ -38,7 +39,7 @@
 #' If the argument \code{from} is a single value, then it is taken as the lower
 #' limit of integration for all the defined integrals required, whereas the upper
 #' limits of integration are the values contained in the argument \code{to}. If
-#' the arguments \code{from} and \code{to} are of similar size, the integrals
+#' the arguments \code{from} and \code{to} are of same size, the integrals
 #' (as many as the size) are computed by sequentially taking the pairs of values
 #' in the \code{from} and \code{to} vectors as limits of integration.
 #'
@@ -66,9 +67,9 @@
 #' # and $\int_{-1}^{1} f(x)dx$
 #' # $f$ being the quadratic fit
 #' Integrate(Gmod, from = c(1,-1), to = c(-1,1), n = 3)
-#' ## Not run:
-#' ## This gives an error
-#' Integrate(Gmod, from = c(1,-1), to = c(1,1), n = 3)
+#' 
+#' # Compute $\int_{-\infty}^{x} f(s)ds$
+#' Integrate(Gmod, from = rep(-Inf, N), to = X, n = 3)
 #' 
 #' @export
 #'
@@ -129,13 +130,14 @@ Integrate <- function(object = NULL, knots = NULL, coef = NULL, from, to, n = 3L
   return(res)
 }
 
+#' @importFrom splines splineDesign
 gedsint <- function(val, knts, coefs, n){
   if (val <= min(knts)) return(0)
   if (val >= max(knts))  return(1)
   pos <- min(which(knts>=val))
-  basisMatrix <- splines::splineDesign(knots = c(knts,max(knts)),
-                                   derivs = rep(0,length(val)),
-                                   x = val, ord = n+1, outer.ok = T)
+  basisMatrix <- splineDesign(knots = c(knts,max(knts)),
+                              derivs = rep(0,length(val)),
+                              x = val, ord = n+1, outer.ok = T)
   
   ris <- as.numeric(basisMatrix[,1:(pos-1)]%*%coefs[1:(pos-1)])
   return(ris)
@@ -146,31 +148,34 @@ gedsint <- function(val, knts, coefs, n){
 #################################### Derive ####################################
 ################################################################################
 ################################################################################
-#' @title Derivative of GeDS objects
+#' @title Derivative of GeDS Objects
 #' @name Derive
 #' @description
 #' This function computes derivatives of a fitted GeDS regression model.
-#' @param object the \code{\link{GeDS-Class}} object containing the GeDS fit
+#' @param object An object of class \code{"GeDS"} containing the GeDS fit
 #' which should be differentiated. It should be the result of fitting a 
 #' univariate GeDS regression via \code{\link{NGeDS}} or \code{\link{GGeDS}}.
-#' @param order integer value indicating the order of differentiation required
+#' @param order Integer value indicating the order of differentiation required
 #' (e.g. first, second or higher derivatives). Note that \code{order} should be
 #' lower than \code{n} and that non-integer values will be passed to the
 #' function \code{\link{as.integer}}.
-#' @param x numeric vector containing values of the independent variable at
+#' @param x Numeric vector containing values of the independent variable at
 #' which the derivatives of order \code{order} should be computed.
-#' @param n integer value (2, 3 or 4) specifying the order (\eqn{=} degree
+#' @param n Integer value (2, 3 or 4) specifying the order (\eqn{=} degree
 #' \eqn{ + 1}) of the GeDS fit to be differentiated. By default equal to
 #' \code{3L}.
-#' @details The function is based on \code{\link[splines]{splineDesign}} and it
-#' computes the exact derivative of the fitted GeDS regression.
-#' 
-#' The function uses the property that the \eqn{m}-th derivative of a spline,
-#' \eqn{m= 1,2,...}, expressed in terms of B-splines can be computed by
-#' differentiating the corresponding B-spline coefficients (see e.g.
-#' De Boor, 2001, Chapter X, formula (15)). Since the GeDS fit is a B-spline
-#' representation of the predictor, it cannot work on the response scale in the
-#' GNM (GLM) framework.
+#' @details
+#' This function relies on the \code{\link[splines]{splineDesign}} function to compute 
+#' the exact derivatives of the GeDS fit. Specifically, it leverages the well-known 
+#' property that the \eqn{m}-th derivative of a spline (for \eqn{m = 1, 2, \ldots}) 
+#' can be obtained by differentiating its B-spline basis functions. This property is 
+#' detailed, e.g., in De Boor (2001, Chapter X, formula (15)).
+#'
+#' Note that the GeDS fit is a B-spline representation of the predictor. Consequently, 
+#' the derivative is computed with respect to the predictor scale and not the response 
+#' scale. This implies that, in the GNM(GLM) framework, the function 
+#' does not return derivatives of the conditional mean on the response scale, but rather 
+#' of the underlying linear predictor scale.
 #' 
 #' @examples
 #' 
@@ -192,7 +197,7 @@ gedsint <- function(val, knts, coefs, n){
 #' # Compute the second derivative of the cubic GeDS fit
 #' # at the points 0, -1 and 1
 #' Derive(Gmod, x = c(0, -1, 1), order = 2, n = 4)
-#'
+#' @importFrom splines splineDesign
 #' @export
 #'
 #' @references De Boor, C. (2001). \emph{A Practical Guide to Splines (Revised Edition)}.
@@ -201,7 +206,7 @@ gedsint <- function(val, knts, coefs, n){
 Derive <- function(object, order = 1L, x, n = 3L)
   {
   if (!inherits(object, "GeDS")) stop("incorrect object class")
-  if (!(object$Type %in% c("LM - Univ","GLM - Univ"))) stop("Implemented only for the univariate case")
+  if (!(object$type %in% c("LM - Univ","GLM - Univ"))) stop("Implemented only for the univariate case")
   x <- as.numeric(x)
   l <- length(x)
   if (order >= n) stop("'order' must be less than 'n'")
@@ -209,9 +214,9 @@ Derive <- function(object, order = 1L, x, n = 3L)
   n <- as.integer(n)
   if (length(order)!=1) stop("'order' must have length 1")
   order <- as.integer(order)
-  kn <- knots(object , options = "all", n = n)
+  kn <- knots(object, options = "all", n = n)
   thetas <- coef(object, n = n)
-  basis <- splines::splineDesign(knots = kn, x = x, ord = n, derivs = rep(order,l), outer.ok = TRUE)
+  basis <- splineDesign(knots = kn, x = x, ord = n, derivs = rep(order,l), outer.ok = TRUE)
   der <- as.numeric(basis%*%thetas)
   der
 }

@@ -169,7 +169,7 @@ test_that("IRIS - NGeDSboost predictions consistency", {
 #       pred9 = predict(Gmodgam, n = ord, newdata = mtcars,  base_learner = "carb")
 # 
 #       if (ord == 2) {
-#         b0 = Gmodgam$final_model$Linear.Fit$Theta["b0"]
+#         b0 = Gmodgam$final_model$linear.fit$theta["b0"]
 #         alpha = if(Gmodgam$args$normalize_data) 0 else mean(mtcars$mpg)
 #         pred0 = alpha + b0
 #       } else {

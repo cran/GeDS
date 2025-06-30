@@ -2,25 +2,25 @@
 % Please edit documentation in R/S3methods.R
 \name{coef.GeDS}
 \alias{coef.GeDS}
-\title{Coef method for GeDS objects}
+\title{Coef Method for GeDS Objects}
 \usage{
 \method{coef}{GeDS}(object, n = 3L, onlySpline = TRUE, ...)
 }
 \arguments{
-\item{object}{the  \code{\link{GeDS-class}} object from which the
-coefficients of the selected GeDS regression should be extracted.}
+\item{object}{The  \code{"GeDS"} class object from which the
+coefficients of the selected GeDS regression model should be extracted.}
 
-\item{n}{integer value (2, 3 or 4) specifying the order (\eqn{=} degree
-\eqn{+ 1}) of the GeDS/GeDSboost/GeDSgam fit whose coefficients should be
-extracted. By default equal to \code{3L}; non-integer values will be passed
-to the function \code{\link{as.integer}}.}
+\item{n}{Integer value (2, 3 or 4) specifying the order (\eqn{=} degree
+\eqn{+ 1}) of the \code{"GeDS"}, \code{"GeDSgam"} or \code{"GeDSboost"}
+fit whose coefficients should be extracted. By default equal to \code{3L};
+non-integer values will be passed to the function \code{\link{as.integer}}.}
 
-\item{onlySpline}{logical variable specifying whether only the coefficients
+\item{onlySpline}{Logical variable specifying whether only the coefficients
 for the GeDS  component of a fitted multivariate regression model should be
-extracted or if, alternatively, also the coefficients of the parametric component
-should also be extracted.}
+extracted or whether the coefficients of both the GeDS and the parametric
+components should be returned.}
 
-\item{...}{potentially further arguments (required by the definition of the
+\item{...}{Potentially further arguments (required by the definition of the
 generic function). These will be ignored, but with a warning.}
 }
 \value{
@@ -32,23 +32,21 @@ the GeDS component are coded as "\code{N}" followed by the index of the
 corresponding B-spline.
 }
 \description{
-Methods for the functions \code{\link[stats]{coef}} that allow to extract the
-estimated coefficients of a fitted GeDS regression from a \code{\link{GeDS-Class}}
+Method for the function \code{\link[stats]{coef}} that allows to extract the
+estimated coefficients of a fitted GeDS regression model from a \code{"GeDS"} class
 object.
 }
 \details{
-These are simple methods for the functions \code{\link[stats]{coef}} and
-\code{\link[stats]{coefficients}}.
+Simple method for the function \code{\link[stats]{coef}}.
 
-As \code{\link{GeDS-class}} objects contain three different fits (linear,
-quadratic and cubic), it is possible to specify the order of the fit for
-which GeDS regression coefficients are required via the input argument
-\code{n}.
+As \code{"GeDS"} class objects contain three different fits (linear,
+quadratic and cubic), the argument \code{n} can be used to specify the order
+of the GeDS fit for which regression coefficients are required.
 
-As mentioned in the details of \code{\link[=formula.GeDS]{formula}}, the
+As mentioned in the Details of \code{\link[=formula.GeDS]{formula}}, the
 predictor model may be multivariate and it may include a (univariate or
-bivariate) GeD spline component whereas the remaining variables may be part
-of a parametric component. If the \code{onlySpline} argument is set to
+bivariate) GeD spline component, plus a parametric component involving the
+remaining variables. If the \code{onlySpline} argument is set to
 \code{TRUE} (the default value), only the coefficients corresponding to the
 GeD spline component of order \code{n} of the multivariate predictor model 
 are extracted.
@@ -65,7 +63,7 @@ Z <- runif(N)
 # a non-linear component f_1(X), a linear component 2*Z and a
 # free term 1, i.e.
 means <- f_1(X) + 2*Z + 1
-# Add normal noise to the mean of y
+# Add normal noise to the mean of Y
 Y <- rnorm(N, means, sd = 0.1)
 
 # Fit to this sample a predictor model of the form f(X) + Z, where
@@ -82,5 +80,5 @@ coef(Gmod, onlySpline = FALSE, n = 3)
 }
 \seealso{
 \code{\link[stats]{coef}} for the standard definition;
-\code{\link{NGeDS}} for examples.
+\code{\link{NGeDS}} for more examples.
 }

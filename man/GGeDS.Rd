@@ -2,7 +2,7 @@
 % Please edit documentation in R/GGeDS.R
 \name{GGeDS}
 \alias{GGeDS}
-\title{Generalized Geometrically Designed Spline regression estimation}
+\title{Generalized Geometrically Designed Spline Regression Estimation}
 \usage{
 GGeDS(
   formula,
@@ -22,92 +22,102 @@ GGeDS(
 )
 }
 \arguments{
-\item{formula}{a description of the structure of the predictor model to be
+\item{formula}{A description of the structure of the predictor model to be
 fitted, including the dependent and independent variables. See
 \code{\link[=formula.GeDS]{formula}} for details.}
 
-\item{family}{a description of the error distribution and link function to be
+\item{family}{A description of the error distribution and link function to be
 used in the model. This can be a character string naming a family function
-(e.g. \code{"gaussian"}), the family function itself (e.g.
+(e.g., \code{"gaussian"}), the family function itself (e.g.
 \code{\link[stats]{gaussian}}) or the result of a call to a family function
-(e.g. \code{gaussian()}). See \link[stats]{family} for details on family
+(e.g., \code{gaussian()}). See \link[stats]{family} for details on family
 functions.}
 
-\item{data}{an optional data frame, list or environment containing the
-variables of the predictor model. If the formula variables are not found in
-\code{data}, they are taken from \code{environment(formula)}, typically the
-environment from which \code{GGeDS} is called.}
+\item{data}{An optional \code{data.frame}, \code{list} or \code{environment}
+containing the variables of the predictor model. If the formula variables are
+not found in \code{data}, they are taken from \code{environment(formula)},
+typically the environment from which \code{GGeDS} is called.}
 
-\item{weights}{an optional vector of `prior weights' to be put on the
+\item{weights}{An optional vector of "prior weights" to be put on the
 observations during the fitting process in case the user requires weighted GeDS
 fitting. It is \code{NULL} by default.}
 
-\item{beta}{numeric parameter in the interval \eqn{[0,1]} tuning the knot
-placement in stage A of GeDS. See details below.}
+\item{beta}{Numeric parameter in the interval \eqn{[0,1]} tuning the knot
+placement in stage A of GeDS. See Details below.}
 
-\item{phi}{numeric parameter in the interval \eqn{[0,1]} specifying the
+\item{phi}{Numeric parameter in the interval \eqn{(0,1)} specifying the
 threshold for the stopping rule  (model selector) in stage A of GeDS. See
-also \code{stoptype} and details below.}
+also \code{stoptype} and Details below.}
 
-\item{min.intknots}{optional parameter allowing the user to set a minimum
+\item{min.intknots}{Optional parameter allowing the user to set a minimum
 number of internal knots to be fit in stage A. By default equal to zero.}
 
-\item{max.intknots}{optional parameter allowing the user to set a maximum
-number of internal knots to be added by the stage A's GeDS estimation
-algorithm. By default equal to the number of knots for the saturated GeDS
-model (i.e. \eqn{N-2}, where \eqn{N} is the number of observations).}
+\item{max.intknots}{Optional parameter allowing the user to set a maximum
+number of internal knots to be added by stage A's GeDS estimation
+algorithm. By default equal to the number of knots \eqn{\kappa} for the saturated
+GeDS model (i.e., \eqn{\kappa=N-2}, where \eqn{N} is the number
+of observations).}
 
-\item{q}{numeric parameter which allows to fine-tune the stopping rule of
-stage A of GeDS, by default equal to 2. See details below.}
+\item{q}{Numeric parameter which allows to fine-tune the stopping rule of
+stage A of GeDS, by default equal to \code{2L}. See Details below.}
 
-\item{Xextr}{numeric vector of 2 elements representing the left-most and
+\item{Xextr}{Numeric vector of 2 elements representing the left-most and
 right-most limits of the interval embedding the observations of the
-independent variable. See details.}
+independent variable. See Details.}
 
-\item{Yextr}{numeric vector of 2 elements representing the left-most and
+\item{Yextr}{Numeric vector of 2 elements representing the left-most and
 right-most limits of the interval embedding the observations of the second
-independent variable (if bivariate GeDS is run). See details.}
+independent variable (if bivariate GeDS is run). See Details.}
 
-\item{show.iters}{logical variable indicating whether or not to print
+\item{show.iters}{Logical variable indicating whether or not to print
 information of the fit at each GeDS iteration. By default equal to \code{FALSE}.}
 
-\item{stoptype}{a character string indicating the type of GeDS stopping rule
+\item{stoptype}{A character string indicating the type of GeDS stopping rule
 to be used. It should be either one of \code{"SR"}, \code{"RD"} or 
-\code{"LR"}, partial match allowed. See details below.}
+\code{"LR"}, partial match allowed. See Details below.}
 
-\item{higher_order}{a logical that defines whether to compute the higher
-order fits (quadratic and cubic) after stage A is run. Default is
-\code{TRUE}.}
+\item{higher_order}{Logical; if \code{TRUE}, the function proceeds to Stage B, 
+fitting higher-order models (quadratic and cubic), after completing Stage A. 
+Default is \code{TRUE}.}
 }
 \value{
-A \code{\link{GeDS-Class}} object, i.e. a list of items that
-summarizes  the main details of the fitted GeDS regression. See
-\code{\link{GeDS-Class}} for details. Some S3 methods are available in order
-to make these objects tractable, such as \code{\link[=coef.GeDS]{coef}},
-\code{\link[=deviance.GeDS]{deviance}}, \code{\link[=knots.GeDS]{knots}},
-\code{\link[=predict.GeDS]{predict}} and \code{\link[=print.GeDS]{print}}
-as well as S4 methods for \code{\link[=lines.GeDS]{lines}} and
-\code{\link[=plot.GeDS]{plot}}.
+An object of class \code{"GeDS"} (a named list) with similar components
+described under \code{\link{NGeDS}}’s \code{@return} plus the following slots:
+\describe{
+\item{type}{Character string indicating the type of regression performed.
+This can be \code{"GLM - Univ"}/\code{"GLM - Biv"}, respectively
+corresponding to generalized (GNM-GLM) univariate/bivariate GeDS (implemented
+by \code{\link{GGeDS}}).}
+\item{guesses}{Initial values for the estimation of the spline coefficients
+at each iteration of stage A. Since the initial values are used only in the
+IRLS procedure, this slot applies only to objects created by \code{\link{GGeDS}},
+\code{\link{GenUnivariateFitter}} or \code{\link{GenBivariateFitter}} functions.}
+\item{iterIrls}{Vector containing the numbers of IRLS iterations for all
+iterations of stage A cumulatively. Since the IRLS procedure is used only in
+\code{\link{GGeDS}}, \code{\link{GenUnivariateFitter}} or \code{\link{GenBivariateFitter}},
+this slot is empty if the object is not created by one of these functions.}
+\item{extcall}{\code{call} to the \code{\link{GGeDS}} function.}
+}
 }
 \description{
-\code{GGeDS} constructs a Geometrically Designed (univariate or bivariate)
+\code{GGeDS} constructs a geometrically designed (univariate or bivariate)
 variable knots spline regression model for the predictor in the context of
-Generalized (Non-)Linear Models. This is referred to as a GeDS model for a
-response with a distribution from the Exponential Family.
+generalized (non-)linear models. This is referred to as a GeDS model for a
+response with a distribution from the exponential family.
 }
 \details{
 The  \code{GGeDS} function extends the GeDS methodology, developed by
 Kaishev et al. (2016) and implemented in the \code{\link{NGeDS}} function
-for the Normal case, to the more general GNM (GLM) context, allowing for the
-response to have any distribution from the Exponential Family. Under the
+for the normal case, to the more general GNM (GLM) context, allowing for the
+response to have any distribution from the exponential family. Under the
 GeDS-GNM approach the (non-)linear predictor is viewed as a spline with 
 variable knots that are estimated along with the regression coefficients and
 the order of the spline, using a two stage procedure. In stage A, a linear
 variable-knot spline is fitted to the data applying iteratively re-weighted
 least squares (see \code{\link{IRLSfit}} function). In stage B, a Schoenberg
 variation diminishing spline approximation to the fit from stage A is
-constructed, thus simultaneously producing spline fits of order 2, 3 and 4,
-all of which are included in the output, a \code{\link{GeDS-Class}} object.
+constructed, thus simultaneously producing spline fits of order 2, 3, and 4,
+all of which are included in the output (an object of class \code{"GeDS"}).
 A detailed description of the underlying algorithm can be found in
 Dimitrova et al. (2023).
 
@@ -129,11 +139,11 @@ function \code{\link[stats]{offset}}.
 
 The parameter \code{beta} tunes the placement of a new knot in stage A of the
 algorithm. At the beginning of each GeDS iteration, a second-order spline is 
-fitted to the data. As follows, the 'working' residuals
+fitted to the data. As follows, the "working residuals"
 (see \code{\link{IRLSfit}}) are computed and grouped by their sign. A new knot
-is then placed at a location defined by the cluster that maximizes a certain
-measure. This measure is defined as a weighted linear combination of the range
-of the independent variable at each cluster and the  mean of the
+is then placed within the cluster that maximizes a certain measure. This measure
+is defined as a weighted linear combination of the range
+of the independent variable at the cluster and the  mean of the
 absolute residuals within it. The parameter \code{beta} determines the
 weights in this measure correspondingly: \code{beta} and \code{1 - beta}.
 The higher \code{beta} is, the more weight is put to the mean of the
@@ -160,7 +170,7 @@ corresponding stopping criterion is compared with a threshold value
 The argument \code{phi} provides a threshold value required for the stopping
 rule to exit the knot placement in stage A of GeDS. The higher the value of
 \code{phi}, the more knots are added under the \code{"RD"} and \code{"SR"}
-stopping rules contrary to the case of the stopping rule \code{"LR"} where
+stopping rules, contrary to the case of the stopping rule \code{"LR"} where
 the lower \code{phi} is, more knots are included in the spline regression.
 Further details for each of the three alternative stopping rules can be found
 in Dimitrova et al. (2023).
@@ -356,9 +366,10 @@ models.
 DOI: \doi{10.1016/j.amc.2022.127493}
 }
 \seealso{
-\code{\link{NGeDS}}; \code{\link{GeDS-Class}}; S3 methods such as
-\code{\link{coef.GeDS}}, \code{\link{deviance.GeDS}}, 
-\code{\link{knots.GeDS}}, \code{\link{print.GeDS}} and
-\code{\link{predict.GeDS}}; \code{\link{Integrate}} and \code{\link{Derive}};
-\code{\link{PPolyRep}}.
+\code{\link{NGeDS}}; S3 methods such as \code{\link{coef.GeDS}},
+\code{\link{confint.GeDS}}, \code{\link{deviance.GeDS}}, \code{\link{family}},
+\code{\link{formula}}, \code{\link{knots.GeDS}}, \code{\link{lines.GeDS}},
+\code{\link{logLik}}, \code{\link{plot.GeDS}}, \code{\link{predict.GeDS}},
+\code{\link{print.GeDS}}, \code{\link{summary.GeDS}}; \code{\link{Integrate}}
+and \code{\link{Derive}}; \code{\link{PPolyRep}}.
 }
