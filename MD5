@@ -1,4 +1,4 @@
-8304348364b5eda93e36388e7847afcb *DESCRIPTION
+ab4d0bb03ef778a3d267b4afd603c971 *DESCRIPTION
 0c8d76be0de50769a51f66d56afb33b1 *NAMESPACE
 42a0f6ecf67cef2b02747b98fe70ca7d *R/BivariateFitter.R
 b29cccf6d0c1cad2f62d8a1a3ac40e80 *R/GGeDS.R
@@ -23,7 +23,7 @@ f85fba43b93855f8d8f535c45b15d8d9 *R/dynlib.R
 0edf0b81363a4048fdcf0ba74669301f *R/lines_GeDSMethod.R
 6425e55dbb04e56ecb14252a1d74c4e6 *R/plot_GeDSMethod.R
 7bb39968309b2303bcd8b584ee4fe82a *R/pprep.R
-2ed83fed4944a294d23d75cbd463ecee *R/predict_helpers.R
+3e59ae6416eceda50011a0f9e9378a05 *R/predict_helpers.R
 92d967d40ab9b1605d35ec917f29d050 *R/read.formula.R
 36a34ec144d49e47d928dfffb39f779f *R/tensorProd_R.R
 9df4f9c2b4832bdf2bfbe3f2e22bd4a8 *README.md
@@ -35,7 +35,7 @@ cb3b20077bebc5da31fc1b46c657c0ff *build/partial.rdb
 f53ed93a8758b8a9bbf34b4e9b19d097 *data/EWmortality.rda
 0f9b34aa63701c8ceacd160306e83ec0 *data/coalMining.rda
 6765dcd3c75446e2d32fe81b32fe5960 *inst/CITATION
-8bcc084f7f40f9382300b2d15037c108 *inst/doc/jss_article.pdf
+838bbcab4eeb539cbfb3836cbf4a600e *inst/doc/jss_article.pdf
 c7045e665676562e5c8e25df89d988d7 *inst/doc/jss_article.pdf.asis
 1e6a3b590965ef8871f5ee1a50f8a25c *inst/doc/rpubs_GeDS.R
 b12eb5913635a41bc1c082a5eb32beac *inst/doc/rpubs_GeDS.Rmd
@@ -45,8 +45,8 @@ b5658625441bd6ccd23e6759909f71f9 *inst/doc/rpubs_GeDSboost.Rmd
 405421833b19734e4b3879e5bd3d9b36 *inst/doc/rpubs_GeDSboost.html
 b267a8499838dc718743abb21918df8a *inst/doc/rpubs_GeDSgam.R
 c2e6ffde99195b1ef9287b9164a6e9d9 *inst/doc/rpubs_GeDSgam.Rmd
-9d628645e9445089b0ed2057e20fa64a *inst/doc/rpubs_GeDSgam.html
-4a3c55df31bad78271f4dcc8c8564c71 *inst/extdata/jss_article.pdf
+41b4d1c4222f94887aeedc95cc28e5e0 *inst/doc/rpubs_GeDSgam.html
+838bbcab4eeb539cbfb3836cbf4a600e *inst/extdata/jss_article.pdf
 ad9431313700b805b3450fc07a4ab3fb *man/BaFe2As2.Rd
 e9272e6b7f38a4195d34b2c06d5e4953 *man/BivariateFitters.Rd
 7eda9767f60ff4404d9bcc0c78cd6e44 *man/CrystalData.Rd
@@ -95,7 +95,7 @@ fc4283917689efc86cd03398d7acb2af *tests/testthat/test-crossv-geds.R
 fb6ae98ce484e99086706b16bbd27cbb *tests/testthat/test-edge-cases.R
 25b26a9aff9a5a4c1ccd76d9e24d8755 *tests/testthat/test-example-8-3-workflow.R
 86bfc2b66b07737694ca726be0a0e951 *tests/testthat/test-linear-separation.R
-e43bbe6d12fa0f9e5daf0f3747727d03 *tests/testthat/test-predictions.R
+da040bfcf099e7789aa3e121c9ab4d5c *tests/testthat/test-predictions.R
 e441610fe0074f01c43b83f85a28b223 *tests/testthat/test-reference-values.R
 cc73c6d7dc5d762c89ba3cd92bb83231 *tests/testthat/test-shape-constrain.R
 b0db172b35a6e6ad2d9981b7b00ea2ca *vignettes/apa.csl
