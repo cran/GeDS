@@ -102,7 +102,7 @@ base-learner. Default is equal to \code{0.99}. See Details in \code{\link{NGeDS}
 \item{int.knots_boost}{The maximum number of internal knots that each GeDS base-learner
 may have at each boosting iteration, effectively setting the value of
 \code{max.intknots} in \code{\link{NGeDS}}. By default equal to the
-number of knots for the saturated GeDS model (i.e., \eqn{\kappa = N - 2}). 
+number of knots for the saturated GeDS model (i.e., \eqn{\kappa = N - 2}).
 Increasing or decreasing \code{phi} and/or \code{q} should suffice to regulate
 the base-learner strength (i.e., the number of internal knots).}
 
@@ -168,7 +168,7 @@ An object of class \code{"GeDSboost"} (a named list) with components:
   }
 
   \item{models}{A list containing the model generated at each boosting iteration.
-  Each of these \code{models} includes: 
+  Each of these \code{models} includes:
     \describe{
       \item{\code{best_bl}}{Fit of the base learner that minimized the residual
       sum of squares (RSS) in fitting the gradient at the \emph{i}-th boosting
@@ -186,13 +186,16 @@ An object of class \code{"GeDSboost"} (a named list) with components:
        model.}
       \item{\code{dev}}{Deviance of the final model.}
       \item{\code{Y_hat}}{Fitted values.}
-      \item{\code{base_learners}}{A list containing, for each base-learner, the
-      intervals defined by the piecewise linear fit and its corresponding
-      polynomial coefficients. It also includes the knots corresponding to each
-      order fit, which result from computing the corresponding averaging knot
-      location. See Kaishev et al. (2016) for details. If the number of internal
-      knots of the final linear fit is less than \eqn{n-1}, the averaging knot location
-      is not computed.}
+      \item{\code{base_learners}}{A list containing, for each base-learner
+      \emph{selected by the boosting algorithm} (i.e. chosen as the
+      best base-learner in at least one boosting iteration), the intervals
+      defined by the piecewise linear fit and its corresponding polynomial
+      coefficients. It also includes the knots corresponding to each order
+      fit, which result from computing the corresponding averaging knot
+      location. See Kaishev et al. (2016) for details. If the number of
+      internal knots of the final linear fit is less than \eqn{n-1}, the
+      averaging knot location is not computed. Base-learners present in the
+      model formula but never selected during boosting are not included.}
       \item{\code{linear.fit}/\code{quadratic.fit}/\code{cubic.fit}}{Final
       linear, quadratic and cubic fits in B-spline form. These include the
       same elements as in a \code{\link{NGeDS}}/\code{\link{GGeDS}} object (see
@@ -229,7 +232,7 @@ On the one hand, \code{NGeDSboost} includes all the parameters of
 \code{\link{NGeDS}}, which in this case tune the base-learner fit at each
 boosting iteration. On the other hand, \code{NGeDSboost} includes some
 additional parameters proper to the FGB procedure. We describe the main ones
-as follows. 
+as follows.
 
 First, \code{family} allows to specify the loss function and corresponding
 risk function to be optimized by the boosting algorithm. If
@@ -239,7 +242,7 @@ empirical risk minimizer corresponding to the family chosen. If
 \code{\link{NGeDS}} fit with maximum number of internal knots equal to
 \code{int.knots_init}.
 
-\code{shrinkage} tunes the step length/shrinkage parameter which helps to 
+\code{shrinkage} tunes the step length/shrinkage parameter which helps to
 control the learning rate of the model. In other words, when a new base
 learner is added to the ensemble, its contribution to the final prediction is
 multiplied by the shrinkage parameter. The smaller \code{shrinkage} is, the
@@ -297,7 +300,7 @@ cat("\n", "MEAN SQUARED ERROR", "\n",
     "Cubic NGeDSboost:", MSE_Gmodboost_cubic, "\n")
 
 ## S3 methods for class 'GeDSboost'
-# Print 
+# Print
 print(Gmodboost); summary(Gmodboost)
 # Knots
 knots(Gmodboost, n = 2)

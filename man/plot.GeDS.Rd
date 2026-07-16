@@ -41,8 +41,8 @@ before changing the plot page.}
 \item{main}{An optional character string used as the plot title. If set to
 \code{"detail"}, the knots vector will be displayed on the plot.}
 
-\item{legend.pos}{The position of the legend within the panel. See
-\link[graphics]{legend} for details.}
+\item{legend.pos}{The position of the legend within the panel. Set to `NA` to
+suppress the legend. See \link[graphics]{legend} for details.}
 
 \item{legend.text}{A character vector specifying the legend text.}
 
@@ -87,7 +87,7 @@ button.
 
 Note that, in order to ensure stability, if the object was produced by the
 function \code{\link{GGeDS}}, plotting intermediate fits of stage A is
-allowed  only if \code{n = 2}, in contrast to objects produced by 
+allowed  only if \code{n = 2}, in contrast to objects produced by
 \code{\link{NGeDS}} for which plotting intermediate results is allowed also
 for \code{n = }2 or 3 results.
 
@@ -154,7 +154,7 @@ Y <- rpois(N,means)
                 Xextr = c(-2,2)))
 
 # similar plots as before, but for the linear fit
-plot(Gmod2, n = 2)
+plot(Gmod2, n = 2, ylab = "response", xlab = "X (Uniform on [-2, 2])")
 plot(Gmod2, which = 10, n = 2)
 \dontrun{
 iters <- (Gmod2$Nintknots + Gmod2$args$q + 1)
